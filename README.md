@@ -297,8 +297,8 @@ cd Synapse
 
 ### Build Outputs
 
-- `synapse-core/build/libs/synapse-core-1.0.jar` - Core library
-- `synapse-platform/bukkit/build/libs/synapse-bukkit-1.0.jar` - Bukkit plugin
+- `synapse-core/build/libs/synapse-core-x.x.jar` - Core library
+- `synapse-platform/bukkit/build/libs/synapse-bukkit-x.x.jar` - Bukkit plugin
 
 ### Development Setup
 

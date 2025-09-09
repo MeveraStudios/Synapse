@@ -11,10 +11,24 @@ import java.util.stream.Collectors;
  */
 public final class Namespace {
 
+    /**
+     * Creates a Namespace from a variable number of names.
+     *
+     * @param names the names to include in the namespace
+     * @return a new Namespace instance
+     * @throws IllegalArgumentException if no names are provided
+     */
     public static Namespace of(final String... names) {
         return new Namespace(Set.of(names));
     }
 
+    /**
+     * Creates a Namespace from a collection of names.
+     *
+     * @param names the collection of names to include in the namespace
+     * @return a new Namespace instance
+     * @throws IllegalArgumentException if the collection is empty
+     */
     public static Namespace of(final Collection<String> names) {
         return new Namespace(names);
     }
@@ -25,6 +39,10 @@ public final class Namespace {
         this.names = names.stream().
                 map(String::toLowerCase)
                 .collect(Collectors.toSet());
+
+        if (this.names.isEmpty()) {
+            throw new IllegalArgumentException("Namespace cannot be empty");
+        }
     }
 
     public Optional<String> firstName() {
