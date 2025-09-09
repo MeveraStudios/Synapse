@@ -1,0 +1,6 @@
+name: Synapse
+main: studio.mevera.synapse.BukkitPlugin
+version: 1.0.0
+api-version: 1.13
+authors:
+  - iiAhmedYT
