@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public final class BukkitSynapse extends SynapseBase<CommandSender, BukkitUser, BukkitNeuron> {
+public final class BukkitSynapse extends AdventureSynapseBase<CommandSender, BukkitUser, BukkitNeuron> {
 
     private static final BukkitSynapse INSTANCE = new BukkitSynapse();
 

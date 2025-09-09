@@ -19,13 +19,6 @@ public interface Neuron<U extends User> {
     Namespace namespace();
 
     /**
-     * Registers a placeholder with this neuron.
-     *
-     * @param placeholder the placeholder to register
-     */
-    void register(Placeholder<U> placeholder);
-
-    /**
      * Handles a request for a placeholder.
      *
      * @param tag the tag of the placeholder
@@ -41,6 +34,20 @@ public interface Neuron<U extends User> {
      * @return a CompletableFuture that will complete with the resolved value
      */
     CompletableFuture<String> onRequestAsync(String tag, Context<U> context);
+
+    /**
+     * Checks if a placeholder with a specific name/tag is registered
+     *
+     * @param tag the tag requested
+     */
+    boolean isRegistered(String tag);
+
+    /**
+     * Registers a placeholder with this neuron.
+     *
+     * @param placeholder the placeholder to register
+     */
+    void register(Placeholder<U> placeholder);
 
     /**
      * Registers a static placeholder with a name and a value.

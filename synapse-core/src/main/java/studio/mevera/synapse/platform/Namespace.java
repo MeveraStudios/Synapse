@@ -1,6 +1,7 @@
 package studio.mevera.synapse.platform;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -10,24 +11,32 @@ import java.util.stream.Collectors;
  */
 public final class Namespace {
 
-    public static Namespace of(final String... namespaces) {
-        return new Namespace(Set.of(namespaces));
+    public static Namespace of(final String... names) {
+        return new Namespace(Set.of(names));
     }
 
-    public static Namespace of(final Collection<String> namespaces) {
-        return new Namespace(namespaces);
+    public static Namespace of(final Collection<String> names) {
+        return new Namespace(names);
     }
 
-    private final Set<String> namespaces;
+    private final Set<String> names;
 
-    private Namespace(final Collection<String> namespaces) {
-        this.namespaces = namespaces.stream().
+    private Namespace(final Collection<String> names) {
+        this.names = names.stream().
                 map(String::toLowerCase)
                 .collect(Collectors.toSet());
     }
 
-    public Set<String> getNamespaces() {
-        return namespaces;
+    public Optional<String> firstName() {
+        return this.names.stream().findFirst();
+    }
+
+    public Set<String> getNames() {
+        return names;
+    }
+
+    public boolean isEmpty() {
+        return this.names.isEmpty();
     }
 
 }

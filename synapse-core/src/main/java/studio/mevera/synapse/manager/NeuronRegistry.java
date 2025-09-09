@@ -24,13 +24,13 @@ public class NeuronRegistry<U extends User, N extends Neuron<U>> {
      */
     public void register(final N neuron) {
         final Namespace namespace = neuron.namespace();
-        for (final String ns : namespace.getNamespaces()) {
+        for (final String ns : namespace.getNames()) {
             if (neurons.containsKey(ns)) {
                 throw new IllegalArgumentException("Neuron with namespace " + ns + " is already registered.");
             }
         }
 
-        for (final String ns : namespace.getNamespaces()) {
+        for (final String ns : namespace.getNames()) {
             neurons.put(ns, neuron);
         }
     }

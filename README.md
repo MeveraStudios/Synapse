@@ -46,6 +46,7 @@ Synapse is a high-performance, extensible placeholder translation framework that
 - 💾 **Intelligent Caching**: Built-in caching mechanisms with expiration support
 - 🎨 **Regex Utilities**: Advanced pattern matching and text processing utilities
 - 🧪 **Comprehensive Testing**: Extensive test suite ensuring reliability
+- 🔗 **PAPI Backward-Compatibility**: In Bukkit you could just call BukkitNeuron#hookToPAPI and we will do the rest
 
 ## 🏗️ Architecture
 

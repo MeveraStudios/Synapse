@@ -13,8 +13,8 @@ import java.util.function.Supplier;
 
 public abstract class NeuronBase<U extends User> implements Neuron<U> {
 
-    private final Namespace namespace;
-    private final Map<String, Placeholder<U>> placeholders = new HashMap<>();
+    protected final Namespace namespace;
+    protected final Map<String, Placeholder<U>> placeholders = new HashMap<>();
 
     public NeuronBase(final Namespace namespace) {
         this.namespace = namespace;
@@ -26,11 +26,6 @@ public abstract class NeuronBase<U extends User> implements Neuron<U> {
     @Override
     public Namespace namespace() {
         return namespace;
-    }
-
-    @Override
-    public void register(final Placeholder<U> placeholder) {
-        this.placeholders.put(placeholder.name(), placeholder);
     }
 
     @Override
@@ -47,12 +42,11 @@ public abstract class NeuronBase<U extends User> implements Neuron<U> {
         return CompletableFuture.supplyAsync(() -> this.onRequest(tag, context));
     }
 
-    /**
-     * Registers a static placeholder with a name and a value.
-     *
-     * @param name  the name of the placeholder
-     * @param value the value of the placeholder
-     */
+    @Override
+    public void register(final Placeholder<U> placeholder) {
+        this.placeholders.put(placeholder.name(), placeholder);
+    }
+
     @Override
     public void register(
             final String name,
@@ -61,12 +55,6 @@ public abstract class NeuronBase<U extends User> implements Neuron<U> {
         this.register(new StaticPlaceholder<>(name, value));
     }
 
-    /**
-     * Registers a static placeholder with a name and a supplier for the value.
-     *
-     * @param name  the name of the placeholder
-     * @param value the supplier for the value of the placeholder
-     */
     @Override
     public void register(
             final String name,
@@ -75,13 +63,6 @@ public abstract class NeuronBase<U extends User> implements Neuron<U> {
         this.register(new StaticPlaceholder<>(name, value));
     }
 
-    /**
-     * Registers a static placeholder with a name, a supplier for the value, and options.
-     *
-     * @param name     the name of the placeholder
-     * @param supplier the supplier for the value of the placeholder
-     * @param options  the options for the placeholder
-     */
     @Override
     public void register(
             final String name,
@@ -91,12 +72,6 @@ public abstract class NeuronBase<U extends User> implements Neuron<U> {
         this.register(new StaticPlaceholder<>(name, supplier, options));
     }
 
-    /**
-     * Registers a contextual placeholder with a name and a resolving function.
-     *
-     * @param name  the name of the placeholder
-     * @param value the resolving function for the placeholder
-     */
     @Override
     public void register(
             final String name,
@@ -105,13 +80,6 @@ public abstract class NeuronBase<U extends User> implements Neuron<U> {
         this.register(new ContextualPlaceholder<>(name, value));
     }
 
-    /**
-     * Registers a contextual placeholder with a name, a resolving function, and options.
-     *
-     * @param name    the name of the placeholder
-     * @param value   the resolving function for the placeholder
-     * @param options the options for the placeholder
-     */
     @Override
     public void register(
             final String name,
@@ -119,6 +87,11 @@ public abstract class NeuronBase<U extends User> implements Neuron<U> {
             final Consumer<ContextualPlaceholder.Options.Builder> options
     ) {
         this.register(new ContextualPlaceholder<>(name, value, options));
+    }
+
+    @Override
+    public boolean isRegistered(final String name) {
+        return this.placeholders.containsKey(name);
     }
 
 }
