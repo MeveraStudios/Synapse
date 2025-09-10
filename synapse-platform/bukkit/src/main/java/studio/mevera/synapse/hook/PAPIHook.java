@@ -16,14 +16,16 @@ import java.util.NoSuchElementException;
 public final class PAPIHook extends PlaceholderExpansion {
 
     private final BukkitNeuron neuron;
+    private final String namespace;
 
     public PAPIHook(final BukkitNeuron neuron) {
         this.neuron = neuron;
+        this.namespace = neuron.namespace().firstName().orElseThrow(() -> new NoSuchElementException("There was no namespace found for a registered neuron"));
     }
 
     @Override
     public @NotNull String getIdentifier() {
-        return neuron.namespace().firstName().orElseThrow(() -> new NoSuchElementException("There was no namespace found for a registered neuron"));
+        return this.namespace;
     }
 
     @Override
@@ -60,8 +62,8 @@ public final class PAPIHook extends PlaceholderExpansion {
 
         final Context<BukkitUser> context = new ContextBase<>(
                 user,
-                splitParams[0],
-                this.neuron.namespace().firstName().orElseThrow(),
+                tag,
+                this.namespace,
                 Arrays.stream(splitParams).skip(1).toArray(String[]::new)
         );
 
