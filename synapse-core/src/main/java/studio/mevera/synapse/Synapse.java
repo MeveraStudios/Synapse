@@ -4,6 +4,7 @@ import studio.mevera.synapse.platform.Neuron;
 import studio.mevera.synapse.platform.User;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 /**
  * Synapse interface for translating text based on user context and registered neurons.
@@ -46,6 +47,18 @@ public interface Synapse<O, U extends User, N extends Neuron<U>> {
     }
 
     /**
+     * Translates the given text using the provided user context.
+     *
+     * @param text The text to translate, which may contain placeholders.
+     * @param user The user context for translation, providing necessary information.
+     * @param executor The executor to run the translation task.
+     * @return The translated text with placeholders replaced by their corresponding values.
+     */
+    default CompletableFuture<String> translateAsync(String text, U user, Executor executor) {
+        return CompletableFuture.supplyAsync(() -> this.translate(text, user), executor);
+    }
+
+    /**
      * Translates the given text using the user created from the provided origin object.
      *
      * @param text   The text to translate, which may contain placeholders.
@@ -53,7 +66,19 @@ public interface Synapse<O, U extends User, N extends Neuron<U>> {
      * @return The translated text with placeholders replaced by their corresponding values.
      */
     default CompletableFuture<String> translateAsync(String text, O origin) {
-        return CompletableFuture.supplyAsync(() -> this.translate(text, this.asUser(origin)));
+        return this.translateAsync(text, this.asUser(origin));
+    }
+
+    /**
+     * Translates the given text using the user created from the provided origin object.
+     *
+     * @param text   The text to translate, which may contain placeholders.
+     * @param origin The origin object, typically a command sender or similar.
+     * @param executor The executor to run the translation task.
+     * @return The translated text with placeholders replaced by their corresponding values.
+     */
+    default CompletableFuture<String> translateAsync(String text, O origin, Executor executor) {
+        return this.translateAsync(text, this.asUser(origin), executor);
     }
 
     /**
