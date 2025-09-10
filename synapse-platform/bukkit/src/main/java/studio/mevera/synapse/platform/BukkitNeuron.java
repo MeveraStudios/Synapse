@@ -1,6 +1,7 @@
 package studio.mevera.synapse.platform;
 
 import lombok.Getter;
+import net.kyori.adventure.identity.Identity;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import studio.mevera.synapse.BukkitSynapse;
@@ -40,7 +41,10 @@ public class BukkitNeuron extends AdventureNeuronBase<BukkitUser> {
             args.add(queue.pop().value());
         }
 
-        final var target = context.targetAsType(CommandSender.class);
+        var uuid = context.targetOrThrow().get(Identity.UUID);
+        final CommandSender target = uuid.isPresent()
+                ? plugin.getServer().getPlayer(uuid.get())
+                : plugin.getServer().getConsoleSender();
         return new ContextBase<>(
                 BukkitSynapse.get().asUser(target),
                 tag,

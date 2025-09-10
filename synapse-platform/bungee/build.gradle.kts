@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":synapse-core"))
+    implementation(project(":synapse-platform:adventure"))
     compileOnly("net.md-5:bungeecord-api:1.20-R0.3-SNAPSHOT")
 }
 

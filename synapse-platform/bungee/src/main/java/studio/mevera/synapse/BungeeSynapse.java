@@ -10,7 +10,7 @@ import studio.mevera.synapse.platform.BungeeUser;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public final class BungeeSynapse extends SynapseBase<CommandSender, BungeeUser, BungeeNeuron> {
+public final class BungeeSynapse extends AdventureSynapseBase<CommandSender, BungeeUser, BungeeNeuron> {
 
     private static final BungeeSynapse INSTANCE = new BungeeSynapse();
 
