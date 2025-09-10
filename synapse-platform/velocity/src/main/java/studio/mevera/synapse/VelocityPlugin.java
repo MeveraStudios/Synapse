@@ -1,0 +1,50 @@
+package studio.mevera.synapse;
+
+import com.google.inject.Inject;
+import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.connection.DisconnectEvent;
+import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
+import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
+import com.velocitypowered.api.plugin.Plugin;
+import com.velocitypowered.api.plugin.PluginContainer;
+import com.velocitypowered.api.proxy.ProxyServer;
+import lombok.Getter;
+import org.slf4j.Logger;
+import studio.mevera.synapse.internal.VelocityInternalNeuron;
+
+@Plugin(id = "synapse", name = "Synapse", version = "1.0.0", authors = {"iiAhmedYT"})
+public final class VelocityPlugin {
+
+    @Getter
+    private static VelocityPlugin instance;
+
+    @Getter
+    private final ProxyServer server;
+    @Getter
+    private final PluginContainer container;
+    private final Logger logger;
+
+    @Inject
+    public VelocityPlugin(final ProxyServer server, final Logger logger, final PluginContainer container) {
+        this.server = server;
+        this.logger = logger;
+        this.container = container;
+    }
+
+    @Subscribe
+    public void onInit(final ProxyInitializeEvent event) {
+        instance = this;
+        this.server.getEventManager().register(this, this);
+        VelocitySynapse.get().registerNeuron(new VelocityInternalNeuron());
+    }
+
+    @Subscribe
+    public void onShutdown(final ProxyShutdownEvent event) {
+        instance = null;
+    }
+
+    @Subscribe
+    public void onDisconnect(final DisconnectEvent event) {
+        VelocitySynapse.get().onDisconnect(event);
+    }
+}
