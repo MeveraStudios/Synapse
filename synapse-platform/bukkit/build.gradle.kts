@@ -17,10 +17,18 @@ repositories {
             includeGroup("me.clip")
         }
     }
+    maven {
+        name = "libby-repo"
+        url = uri("https://repo.alessiodp.com/snapshots")
+        content {
+            includeGroup("com.alessiodp.libby")
+        }
+    }
 }
 
 dependencies {
     implementation(project(":synapse-platform:adventure"))
+    implementation("com.alessiodp.libby:libby-bukkit:2.0.0-SNAPSHOT")
 
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT")
