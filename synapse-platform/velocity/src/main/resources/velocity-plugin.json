@@ -1,0 +1,7 @@
+{
+  "id": "synapse",
+  "name": "Synapse",
+  "version": "1.0.0",
+  "authors": ["iiAhmedYT"],
+  "main": "studio.mevera.synapse.VelocityPlugin"
+}
