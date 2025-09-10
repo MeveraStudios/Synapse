@@ -20,8 +20,14 @@ public abstract class AdventureNeuronBase<U extends User> extends NeuronBase<U> 
         return this.resolver;
     }
 
+    @Override
+    public void register(final Placeholder<U> placeholder) {
+        super.register(placeholder);
+        this.refreshAdventureTags();
+    }
+
     @SuppressWarnings("ALL")
-    public void refreshAdventureTags() {  // TODO: refresh on every placeholder register
+    public void refreshAdventureTags() {
         final TagResolver.Builder builder = TagResolver.builder();
         for (final Placeholder<U> placeholder : this.placeholders.values()) {
             builder.tag(placeholder.name(), (argumentQueue, context) -> {
