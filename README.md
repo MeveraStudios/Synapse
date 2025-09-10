@@ -259,15 +259,16 @@ public class CustomNeuron extends NeuronBase<BukkitUser> {
 
 ### Currently Supported
 
-| Platform | Status | Module | Version |
-|----------|--------|--------|---------|
-| **Bukkit/Paper** | ✅ Stable | `synapse-bukkit` | 1.21.6+ |
+| Platform         | Status | Module             | Version |
+|------------------|--------|--------------------|---------|
+| **Bukkit/Paper** | ✅ Stable | `synapse-bukkit`   | 1.21.6+ |
+| **Bungee**       | ✅ Stable | `synapse-bungee`   | ------- |
+| **Velocity**     | ✅ Stable | `synapse-velocity` | ------- |
 
 ### Planned Support
 
 | Platform | Status | ETA |
 |----------|--------|-----|
-| **Velocity** | 🚧 In Development | Q1 2026 |
 | **Fabric** | 📋 Planned | Q2 2026 |
 | **Forge** | 📋 Planned | Q2 2026 |
 
