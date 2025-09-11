@@ -36,6 +36,7 @@ public abstract class AdventureNeuronBase<U extends User> extends NeuronBase<U> 
     public void refreshAdventureTags() {
         final TagResolver.Builder builder = TagResolver.builder();
         for (final Placeholder<U> placeholder : this.placeholders.values()) {
+            if (placeholder.isRelational()) continue;
             builder.tag(placeholder.name(), (argumentQueue, context) -> {
                 return Tag.preProcessParsed(placeholder.resolve(toContext(placeholder.name(), argumentQueue, context)));
             });
