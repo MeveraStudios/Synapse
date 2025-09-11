@@ -124,4 +124,10 @@ public interface Neuron<U extends User> {
             String... aliases
     );
 
+    /**
+     * Unregisters a placeholder with a specific name/tag.
+     *
+     * @param tag the tag of the placeholder to unregister
+     */
+    void unregister(String tag);
 }

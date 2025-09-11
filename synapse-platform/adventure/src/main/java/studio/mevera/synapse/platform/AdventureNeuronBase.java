@@ -26,6 +26,12 @@ public abstract class AdventureNeuronBase<U extends User> extends NeuronBase<U> 
         this.refreshAdventureTags();
     }
 
+    @Override
+    public void unregister(final String tag) {
+        super.unregister(tag);
+        this.refreshAdventureTags();
+    }
+
     @SuppressWarnings("ALL")
     public void refreshAdventureTags() {
         final TagResolver.Builder builder = TagResolver.builder();

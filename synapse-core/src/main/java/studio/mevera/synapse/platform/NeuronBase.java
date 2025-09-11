@@ -121,4 +121,10 @@ public abstract class NeuronBase<U extends User> implements Neuron<U> {
         return this.placeholders.containsKey(name);
     }
 
+    @Override
+    public void unregister(final String tag) {
+        final Placeholder<U> placeholder = this.placeholders.remove(tag);
+        this.placeholders.entrySet().removeIf(entry -> entry.getValue().equals(placeholder));
+    }
+
 }
