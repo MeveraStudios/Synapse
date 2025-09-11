@@ -21,8 +21,8 @@ public abstract class AdventureNeuronBase<U extends User> extends NeuronBase<U> 
     }
 
     @Override
-    public void register(final Placeholder<U> placeholder) {
-        super.register(placeholder);
+    public void register(final Placeholder<U> placeholder, final String... aliases) {
+        super.register(placeholder, aliases);
         this.refreshAdventureTags();
     }
 

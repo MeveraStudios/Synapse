@@ -48,7 +48,7 @@ public interface Neuron<U extends User> {
      *
      * @param placeholder the placeholder to register
      */
-    void register(Placeholder<U> placeholder);
+    void register(Placeholder<U> placeholder, String... aliases);
 
     /**
      * Registers a static placeholder with a name and a value.
@@ -56,7 +56,7 @@ public interface Neuron<U extends User> {
      * @param name  the name of the placeholder
      * @param value the value of the placeholder
      */
-    void register(String name, String value);
+    void register(String name, String value, String... aliases);
 
     /**
      * Registers a static placeholder with a name and a supplier for the value.
@@ -64,7 +64,7 @@ public interface Neuron<U extends User> {
      * @param name  the name of the placeholder
      * @param value the supplier for the value of the placeholder
      */
-    void register(String name, Supplier<String> value);
+    void register(String name, Supplier<String> value, String... aliases);
 
     /**
      * Registers a static placeholder with a name, a supplier for the value, and options.
@@ -76,7 +76,8 @@ public interface Neuron<U extends User> {
     void register(
             String name,
             Supplier<String> supplier,
-            Consumer<StaticPlaceholder.Options.Builder> options
+            Consumer<StaticPlaceholder.Options.Builder> options,
+            String... aliases
     );
 
     /**
@@ -85,7 +86,7 @@ public interface Neuron<U extends User> {
      * @param name  the name of the placeholder
      * @param value the resolving function for the placeholder
      */
-    void register(String name, ContextualPlaceholder.ResolvingFunction<U> value);
+    void register(String name, ContextualPlaceholder.ResolvingFunction<U> value, String... aliases);
 
     /**
      * Registers a contextual placeholder with a name, a resolving function, and options.
@@ -97,7 +98,8 @@ public interface Neuron<U extends User> {
     void register(
             String name,
             ContextualPlaceholder.ResolvingFunction<U> value,
-            Consumer<ContextualPlaceholder.Options.Builder> options
+            Consumer<ContextualPlaceholder.Options.Builder> options,
+            String... aliases
     );
 
     /**
@@ -106,7 +108,7 @@ public interface Neuron<U extends User> {
      * @param name  the name of the placeholder
      * @param value the resolving function for the placeholder
      */
-    void registerRelational(String name, RelationalPlaceholder.ResolvingFunction<U> value);
+    void registerRelational(String name, RelationalPlaceholder.ResolvingFunction<U> value, String... aliases);
 
     /**
      * Registers a relational placeholder with a name, a resolving function, and options.
@@ -118,7 +120,8 @@ public interface Neuron<U extends User> {
     void registerRelational(
             String name,
             RelationalPlaceholder.ResolvingFunction<U> value,
-            Consumer<RelationalPlaceholder.Options.Builder> options
+            Consumer<RelationalPlaceholder.Options.Builder> options,
+            String... aliases
     );
 
 }

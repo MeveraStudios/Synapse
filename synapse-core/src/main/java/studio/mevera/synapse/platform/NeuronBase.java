@@ -43,67 +43,77 @@ public abstract class NeuronBase<U extends User> implements Neuron<U> {
     }
 
     @Override
-    public void register(final Placeholder<U> placeholder) {
+    public void register(final Placeholder<U> placeholder, final String... aliases) {
         this.placeholders.put(placeholder.name(), placeholder);
+        for (final String alias : aliases) {
+            this.placeholders.put(alias.toLowerCase(), placeholder);
+        }
     }
 
     @Override
     public void register(
             final String name,
-            final String value
+            final String value,
+            final String... aliases
     ) {
-        this.register(new StaticPlaceholder<>(name, value));
+        this.register(new StaticPlaceholder<>(name, value), aliases);
     }
 
     @Override
     public void register(
             final String name,
-            final Supplier<String> value
+            final Supplier<String> value,
+            final String... aliases
     ) {
-        this.register(new StaticPlaceholder<>(name, value));
+        this.register(new StaticPlaceholder<>(name, value), aliases);
     }
 
     @Override
     public void register(
             final String name,
             final Supplier<String> supplier,
-            final Consumer<StaticPlaceholder.Options.Builder> options
+            final Consumer<StaticPlaceholder.Options.Builder> options,
+            final String... aliases
     ) {
-        this.register(new StaticPlaceholder<>(name, supplier, options));
-    }
-
-    @Override
-    public void register(
-            final String name,
-            final ContextualPlaceholder.ResolvingFunction<U> value
-    ) {
-        this.register(new ContextualPlaceholder<>(name, value));
+        this.register(new StaticPlaceholder<>(name, supplier, options), aliases);
     }
 
     @Override
     public void register(
             final String name,
             final ContextualPlaceholder.ResolvingFunction<U> value,
-            final Consumer<ContextualPlaceholder.Options.Builder> options
+            final String... aliases
     ) {
-        this.register(new ContextualPlaceholder<>(name, value, options));
+        this.register(new ContextualPlaceholder<>(name, value), aliases);
     }
 
     @Override
-    public void registerRelational(
+    public void register(
             final String name,
-            final RelationalPlaceholder.ResolvingFunction<U> value
+            final ContextualPlaceholder.ResolvingFunction<U> value,
+            final Consumer<ContextualPlaceholder.Options.Builder> options,
+            final String... aliases
     ) {
-        this.register(new RelationalPlaceholder<>(name, value));
+        this.register(new ContextualPlaceholder<>(name, value, options), aliases);
     }
 
     @Override
     public void registerRelational(
             final String name,
             final RelationalPlaceholder.ResolvingFunction<U> value,
-            final Consumer<RelationalPlaceholder.Options.Builder> options
+            final String... aliases
     ) {
-        this.register(new RelationalPlaceholder<>(name, value, options));
+        this.register(new RelationalPlaceholder<>(name, value), aliases);
+    }
+
+    @Override
+    public void registerRelational(
+            final String name,
+            final RelationalPlaceholder.ResolvingFunction<U> value,
+            final Consumer<RelationalPlaceholder.Options.Builder> options,
+            final String... aliases
+    ) {
+        this.register(new RelationalPlaceholder<>(name, value, options), aliases);
     }
 
     @Override
