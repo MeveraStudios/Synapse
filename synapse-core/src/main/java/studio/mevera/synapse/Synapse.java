@@ -36,6 +36,28 @@ public interface Synapse<O, U extends User, N extends Neuron<U>> {
     }
 
     /**
+     * Translates the given text using the provided user context and another user.
+     *
+     * @param text   The text to translate, which may contain placeholders.
+     * @param user   The primary user context for translation.
+     * @param other  The secondary user context for translation.
+     * @return The translated text with placeholders replaced by their corresponding values.
+     */
+    String translate(String text, U user, U other);
+
+    /**
+     * Translates the given text using the users created from the provided origin objects.
+     *
+     * @param text   The text to translate, which may contain placeholders.
+     * @param origin The origin object of the primary user.
+     * @param other The origin object of the other user.
+     * @return The translated text with placeholders replaced by their corresponding values.
+     */
+    default String translate(String text, O origin, O other) {
+        return this.translate(text, this.asUser(origin), this.asUser(other));
+    }
+
+    /**
      * Translates the given text using the provided user context.
      *
      * @param text The text to translate, which may contain placeholders.
@@ -59,6 +81,31 @@ public interface Synapse<O, U extends User, N extends Neuron<U>> {
     }
 
     /**
+     * Translates the given text using the provided user context and another user asynchronously.
+     *
+     * @param text   The text to translate, which may contain placeholders.
+     * @param user   The primary user context.
+     * @param other  The other user context.
+     * @return A CompletableFuture that will complete with the translated text.
+     */
+    default CompletableFuture<String> translateAsync(String text, U user, U other) {
+        return CompletableFuture.supplyAsync(() -> this.translate(text, user, other));
+    }
+
+    /**
+     * Translates the given text using the provided user context and another user asynchronously.
+     *
+     * @param text     The text to translate, which may contain placeholders.
+     * @param user     The primary user context.
+     * @param other    The other user context.
+     * @param executor The executor to run the translation task.
+     * @return A CompletableFuture that will complete with the translated text.
+     */
+    default CompletableFuture<String> translateAsync(String text, U user, U other, Executor executor) {
+        return CompletableFuture.supplyAsync(() -> this.translate(text, user, other), executor);
+    }
+
+    /**
      * Translates the given text using the user created from the provided origin object.
      *
      * @param text   The text to translate, which may contain placeholders.
@@ -79,6 +126,31 @@ public interface Synapse<O, U extends User, N extends Neuron<U>> {
      */
     default CompletableFuture<String> translateAsync(String text, O origin, Executor executor) {
         return this.translateAsync(text, this.asUser(origin), executor);
+    }
+
+    /**
+     * Translates the given text using the users created from the provided origin objects asynchronously.
+     *
+     * @param text   The text to translate, which may contain placeholders.
+     * @param origin The origin object of the primary user.
+     * @param other  The origin object of the other user.
+     * @return A CompletableFuture that will complete with the translated text.
+     */
+    default CompletableFuture<String> translateAsync(String text, O origin, O other) {
+        return this.translateAsync(text, this.asUser(origin), this.asUser(other));
+    }
+
+    /**
+     * Translates the given text using the users created from the provided origin objects asynchronously.
+     *
+     * @param text     The text to translate, which may contain placeholders.
+     * @param origin   The origin object of the primary user.
+     * @param other    The origin object of the other user.
+     * @param executor The executor to run the translation task.
+     * @return A CompletableFuture that will complete with the translated text.
+     */
+    default CompletableFuture<String> translateAsync(String text, O origin, O other, Executor executor) {
+        return this.translateAsync(text, this.asUser(origin), this.asUser(other), executor);
     }
 
     /**

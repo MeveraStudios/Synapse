@@ -1,8 +1,9 @@
 package studio.mevera.synapse;
 
+import studio.mevera.synapse.context.type.RelationalContex;
 import studio.mevera.synapse.manager.NeuronRegistry;
-import studio.mevera.synapse.placeholder.ContextBase;
-import studio.mevera.synapse.placeholder.Context;
+import studio.mevera.synapse.context.type.BasicContex;
+import studio.mevera.synapse.context.Context;
 import studio.mevera.synapse.platform.Neuron;
 import studio.mevera.synapse.platform.User;
 import studio.mevera.synapse.util.RegexUtil;
@@ -42,7 +43,39 @@ public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implem
             }
 
             final String[] args = RegexUtil.extractArguments(matcher.group(2));
-            final Context<U> context = new ContextBase<>(user, tag, namespace, args);
+            final Context<U> context = new BasicContex<>(user, tag, namespace, args);
+            final String replacement = neuron.onRequest(tag.substring(namespace.length() + 1), context);
+
+            if (replacement != null) {
+                matcher.appendReplacement(result, Matcher.quoteReplacement(replacement));
+            }
+        }
+
+        matcher.appendTail(result);
+        return result.toString();
+    }
+
+    @Override
+    public String translate(final String text, final U user, final U other) {
+        if (text == null || text.isEmpty()) {
+            return text;
+        }
+
+        final Matcher matcher = RegexUtil.PLACEHOLDER_PATTERN.matcher(text);
+        final StringBuilder result = new StringBuilder();
+
+        while (matcher.find()) {
+            final String tag = matcher.group(1);
+            final int dotIndex = tag.indexOf('.');
+            final String namespace = dotIndex == -1 ? tag : tag.substring(0, dotIndex);
+            final N neuron = this.neuronRegistry.getNeuron(namespace);
+
+            if (neuron == null) {
+                continue;
+            }
+
+            final String[] args = RegexUtil.extractArguments(matcher.group(2));
+            final Context<U> context = new RelationalContex<>(user, other, tag, namespace, args);
             final String replacement = neuron.onRequest(tag.substring(namespace.length() + 1), context);
 
             if (replacement != null) {

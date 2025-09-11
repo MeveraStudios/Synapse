@@ -15,6 +15,9 @@ public class DefaultBehaviorTests {
     private final TestOrigin testOrigin = new TestOrigin("TestUser");
     private final TestUser testUser = testSynapse.asUser(testOrigin);
 
+    private final TestOrigin otherOrigin = new TestOrigin("OtherUser");
+    private final TestUser otherUser = testSynapse.asUser(otherOrigin);
+
     @BeforeAll
     public static void setup() {
         testSynapse.registerNeuron(new TestNeuron());
@@ -56,6 +59,14 @@ public class DefaultBehaviorTests {
         String second = testSynapse.translate("${test.meows}", testOrigin);
 
         Assertions.assertNotEquals(first, second, "The placeholder value should have been refreshed");
+    }
+
+    @Test
+    public void testRelationalPlaceholder() {
+        Assertions.assertEquals(
+                "TestUser-OtherUser",
+                testSynapse.translate("${test.compare}", testUser, otherUser)
+        );
     }
 
 }

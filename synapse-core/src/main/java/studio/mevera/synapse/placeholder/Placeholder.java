@@ -1,5 +1,6 @@
 package studio.mevera.synapse.placeholder;
 
+import studio.mevera.synapse.context.Context;
 import studio.mevera.synapse.platform.User;
 
 public interface Placeholder<U extends User> {
@@ -13,6 +14,10 @@ public interface Placeholder<U extends User> {
     }
 
     default boolean isContextual() {
+        return false;
+    }
+
+    default boolean isRelational() {
         return false;
     }
 

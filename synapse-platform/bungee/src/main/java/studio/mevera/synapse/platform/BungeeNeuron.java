@@ -5,8 +5,8 @@ import net.kyori.adventure.identity.Identity;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.Plugin;
 import studio.mevera.synapse.BungeeSynapse;
-import studio.mevera.synapse.placeholder.Context;
-import studio.mevera.synapse.placeholder.ContextBase;
+import studio.mevera.synapse.context.Context;
+import studio.mevera.synapse.context.type.BasicContex;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -36,7 +36,7 @@ public class BungeeNeuron extends AdventureNeuronBase<BungeeUser> {
         final CommandSender target = uuid.isPresent()
                 ? plugin.getProxy().getPlayer(uuid.get())
                 : plugin.getProxy().getConsole();
-        return new ContextBase<>(
+        return new BasicContex<>(
                 BungeeSynapse.get().asUser(target),
                 tag,
                 namespace.firstName().orElseThrow(),

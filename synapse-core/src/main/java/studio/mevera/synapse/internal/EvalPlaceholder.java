@@ -2,7 +2,7 @@ package studio.mevera.synapse.internal;
 
 import studio.mevera.synapse.placeholder.Placeholder;
 import studio.mevera.synapse.placeholder.PlaceholderOptions;
-import studio.mevera.synapse.placeholder.Context;
+import studio.mevera.synapse.context.Context;
 import studio.mevera.synapse.platform.User;
 
 public class EvalPlaceholder<U extends User> implements Placeholder<U> {

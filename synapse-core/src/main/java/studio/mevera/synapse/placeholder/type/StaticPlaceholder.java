@@ -2,7 +2,7 @@ package studio.mevera.synapse.placeholder.type;
 
 import studio.mevera.synapse.placeholder.PlaceholderOptionsBase;
 import studio.mevera.synapse.placeholder.PlaceholderOptionsBuilder;
-import studio.mevera.synapse.placeholder.Context;
+import studio.mevera.synapse.context.Context;
 import studio.mevera.synapse.placeholder.Placeholder;
 import studio.mevera.synapse.platform.User;
 import studio.mevera.synapse.util.Utilities;

@@ -29,6 +29,8 @@ public final class TestNeuron extends NeuronBase<TestUser> {
             final String[] args = context.arguments();
             return "Arguments(" + args.length + "): " + String.join(", ", args);
         });
+
+        this.registerRelational("compare", context -> context.user().name() + "-" + context.other().name());
     }
 
 }

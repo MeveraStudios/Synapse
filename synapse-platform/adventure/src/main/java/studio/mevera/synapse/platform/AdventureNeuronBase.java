@@ -2,7 +2,7 @@ package studio.mevera.synapse.platform;
 
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import studio.mevera.synapse.placeholder.Context;
+import studio.mevera.synapse.context.Context;
 import studio.mevera.synapse.placeholder.Placeholder;
 
 public abstract class AdventureNeuronBase<U extends User> extends NeuronBase<U> {

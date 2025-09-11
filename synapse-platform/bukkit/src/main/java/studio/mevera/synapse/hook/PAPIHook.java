@@ -5,8 +5,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import studio.mevera.synapse.BukkitSynapse;
-import studio.mevera.synapse.placeholder.Context;
-import studio.mevera.synapse.placeholder.ContextBase;
+import studio.mevera.synapse.context.Context;
+import studio.mevera.synapse.context.type.BasicContex;
 import studio.mevera.synapse.platform.BukkitNeuron;
 import studio.mevera.synapse.platform.BukkitUser;
 
@@ -60,7 +60,7 @@ public final class PAPIHook extends PlaceholderExpansion {
             return null;
         }
 
-        final Context<BukkitUser> context = new ContextBase<>(
+        final Context<BukkitUser> context = new BasicContex<>(
                 user,
                 tag,
                 this.namespace,

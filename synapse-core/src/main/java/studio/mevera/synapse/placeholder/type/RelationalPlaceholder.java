@@ -1,32 +1,29 @@
 package studio.mevera.synapse.placeholder.type;
 
+import studio.mevera.synapse.context.Context;
+import studio.mevera.synapse.context.type.RelationalContex;
+import studio.mevera.synapse.placeholder.Placeholder;
 import studio.mevera.synapse.placeholder.PlaceholderOptionsBase;
 import studio.mevera.synapse.placeholder.PlaceholderOptionsBuilder;
-import studio.mevera.synapse.context.Context;
-import studio.mevera.synapse.placeholder.Placeholder;
 import studio.mevera.synapse.platform.User;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-public class ContextualPlaceholder<U extends User> implements Placeholder<U> {
+public class RelationalPlaceholder<U extends User> implements Placeholder<U> {
 
     private final String name;
     private final ResolvingFunction<U> value;
     private final Options options;
 
-    public ContextualPlaceholder(final String name, final ResolvingFunction<U> value) {
+    public RelationalPlaceholder(String name, ResolvingFunction<U> value) {
         this.name = name;
         this.value = value;
         this.options = Options.DEFAULT;
     }
 
-    public ContextualPlaceholder(
-            final String name,
-            final ResolvingFunction<U> value,
-            final Consumer<Options.Builder> options
-    ) {
+    public RelationalPlaceholder(String name, ResolvingFunction<U> value, Consumer<Options.Builder> options) {
         this.name = name;
         this.value = value;
 
@@ -46,12 +43,21 @@ public class ContextualPlaceholder<U extends User> implements Placeholder<U> {
     }
 
     @Override
-    public String resolve(final Context<U> context) {
-        Objects.requireNonNull(context);
+    public String resolve(Context<U> unverifiedContext) {
+        Objects.requireNonNull(unverifiedContext);
+        if (!unverifiedContext.isRelational()) {
+            return null;
+        }
+
+        final var context = (RelationalContex<U>) unverifiedContext;
+        final U other = context.other();
+        if (other == null) {
+            return null;
+        }
 
         if (this.options.cache()) {
             final U user = context.user();
-            final String key = context.namespace() + ":" + this.name;
+            final String key = context.namespace() + ":" + this.name + ":" + other.uniqueId();
 
             final String cachedValue = user.getCachedValue(key, context.arguments());
             if (cachedValue != null) {
@@ -66,18 +72,19 @@ public class ContextualPlaceholder<U extends User> implements Placeholder<U> {
         return this.value.resolve(context);
     }
 
-    public interface ResolvingFunction<U extends User> {
-        String resolve(final Context<U> context);
+    @Override
+    public boolean isRelational() {
+        return true;
     }
 
-    @Override
-    public boolean isContextual() {
-        return true;
+    @FunctionalInterface
+    public interface ResolvingFunction<U extends User> {
+        String resolve(final RelationalContex<U> context);
     }
 
     public static final class Options extends PlaceholderOptionsBase {
 
-        private static final Options DEFAULT = new Builder().build();
+        private static final Options DEFAULT = new Options.Builder().build();
 
         private final boolean cache;
         private final long ttlMillis;

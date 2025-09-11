@@ -1,4 +1,4 @@
-package studio.mevera.synapse.placeholder;
+package studio.mevera.synapse.context;
 
 import studio.mevera.synapse.platform.User;
 
@@ -32,5 +32,14 @@ public interface Context<U extends User> {
      * @return the arguments of the context
      */
     String[] arguments();
+
+    /**
+     * Checks if the context is relational.
+     *
+     * @return true if the context is relational, false otherwise
+     */
+    default boolean isRelational() {
+        return false;
+    }
 
 }

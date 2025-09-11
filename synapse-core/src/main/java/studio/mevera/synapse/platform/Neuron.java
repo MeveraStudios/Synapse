@@ -1,8 +1,9 @@
 package studio.mevera.synapse.platform;
 
-import studio.mevera.synapse.placeholder.Context;
+import studio.mevera.synapse.context.Context;
 import studio.mevera.synapse.placeholder.Placeholder;
 import studio.mevera.synapse.placeholder.type.ContextualPlaceholder;
+import studio.mevera.synapse.placeholder.type.RelationalPlaceholder;
 import studio.mevera.synapse.placeholder.type.StaticPlaceholder;
 
 import java.util.concurrent.CompletableFuture;
@@ -97,6 +98,27 @@ public interface Neuron<U extends User> {
             String name,
             ContextualPlaceholder.ResolvingFunction<U> value,
             Consumer<ContextualPlaceholder.Options.Builder> options
+    );
+
+    /**
+     * Registers a relational placeholder with a name and a resolving function.
+     *
+     * @param name  the name of the placeholder
+     * @param value the resolving function for the placeholder
+     */
+    void registerRelational(String name, RelationalPlaceholder.ResolvingFunction<U> value);
+
+    /**
+     * Registers a relational placeholder with a name, a resolving function, and options.
+     *
+     * @param name    the name of the placeholder
+     * @param value   the resolving function for the placeholder
+     * @param options the options for the placeholder
+     */
+    void registerRelational(
+            String name,
+            RelationalPlaceholder.ResolvingFunction<U> value,
+            Consumer<RelationalPlaceholder.Options.Builder> options
     );
 
 }
