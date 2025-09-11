@@ -39,14 +39,13 @@ Synapse is a high-performance, extensible placeholder translation framework that
 - ⚡ **Async Processing**: Non-blocking placeholder resolution with CompletableFuture support
 - 🏗️ **Extensible Design**: Easy to add new platforms and custom neurons
 - 📝 **Rich API**: Comprehensive API for both synchronous and asynchronous operations
-
-### Advanced Features
-- 🔄 **Context-Aware Resolution**: Placeholders resolved based on user context and environment
 - 🏷️ **Namespace Management**: Organized placeholder categorization and conflict prevention
+- 🔄 **Context-Aware Resolution**: Placeholders resolved based on user context and environment
+### Advanced Features
+- 🔗 **Relational Placeholders**: Placeholders that resolve values based on relationships between 2 Users
 - 💾 **Intelligent Caching**: Built-in caching mechanisms with expiration support
-- 🎨 **Regex Utilities**: Advanced pattern matching and text processing utilities
 - 🧪 **Comprehensive Testing**: Extensive test suite ensuring reliability
-- 🔗 **PAPI Backward-Compatibility**: In Bukkit you could just call BukkitNeuron#hookToPAPI and we will do the rest
+- 🔙 **PAPI Backward-Compatibility**: In Bukkit you could just call BukkitNeuron#hookToPAPI and we will do the rest
 
 ## 🏗️ Architecture
 
@@ -131,7 +130,7 @@ Static placeholders are registered inside neurons and do not require user contex
 
 ```java
 // Define a neuron for static placeholders
-public class ServerNeuron extends NeuronBase<BukkitUser> {
+public class ServerNeuron extends BukkitNeuron {
     public ServerNeuron() {
         super(Namespace.of("server"));
         register("version", () -> "1.21.6");
@@ -139,7 +138,7 @@ public class ServerNeuron extends NeuronBase<BukkitUser> {
 }
 
 // Define a neuron for contextual placeholders
-public class PlayerNeuron extends NeuronBase<BukkitUser> {
+public class PlayerNeuron extends BukkitNeuron {
     public PlayerNeuron() {
         super(Namespace.of("player"));
         register("name", ctx -> ctx.user().getName());
@@ -170,7 +169,7 @@ String status = synapse.translate("${player.name} has ${player.health} health", 
 ### Custom Neuron Creation
 
 ```java
-public class CustomNeuron extends NeuronBase<BukkitUser> {
+public class CustomNeuron extends BukkitNeuron {
     public CustomNeuron() {
         super(Namespace.of("custom"));
         // Register placeholders
@@ -205,7 +204,7 @@ synapse.translateAsync("Loading ${database.playerCount} players...", console)
 
 ```java
 // Placeholders that depend on user context
-public class LocationNeuron extends NeuronBase<BukkitUser> {
+public class LocationNeuron extends BukkitNeuron {
     public LocationNeuron() {
         super(Namespace.of("location"));
         register("x", ctx -> String.valueOf(ctx.user().getLocation().getX()));
@@ -219,12 +218,33 @@ public class LocationNeuron extends NeuronBase<BukkitUser> {
 String location = synapse.translate("You are at ${location.x}, ${location.y}, ${location.z} in ${location.world}", player);
 ```
 
+### Relational Placeholders
+
+Relational placeholders allow you to resolve values based on relationships between multiple context objects. For example, you can compare two users, or display information that depends on both a user and a server.
+
+```java
+// Define a relational neuron for comparing two users
+public class CompareUsersNeuron extends BukkitNeuron {
+    public CompareUsersNeuron() {
+        super(Namespace.of("compare"));
+        registerRelational("isSame", ctx -> ctx.user().getName().equals(ctx.other().getName()) ? "Same user" : "Different users");
+    }
+}
+
+// Register the neuron
+synapse.registerNeuron(new CompareUsersNeuron());
+
+// Usage: compare two players
+String result = synapse.translate("Comparison: ${compare.isSame}", player1, player2);
+// Result: "Comparison: Different users"
+```
+
 ### Advanced Placeholder Customization
 
 You can further customize placeholders using the options builder in the `register` method. This allows you to enable async resolution, caching, refresh intervals, and more.
 
 ```java
-public class CustomNeuron extends NeuronBase<BukkitUser> {
+public class CustomNeuron extends BukkitNeuron {
     public CustomNeuron() {
         super(Namespace.of("custom"));
         AtomicInteger i = new AtomicInteger();
