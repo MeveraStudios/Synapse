@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import studio.mevera.synapse.internal.VelocityInternalNeuron;
 import studio.mevera.synapse.util.Utilities;
 
-@Plugin(id = "synapse", name = "Synapse", version = "1.0.0", authors = {"iiAhmedYT"})
+@Plugin(id = "synapse")
 public final class VelocityPlugin {
 
     private static VelocityPlugin instance;

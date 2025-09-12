@@ -34,6 +34,15 @@ java {
     withJavadocJar()
 }
 
+tasks.processResources {
+    val props = mapOf("version" to version)
+    inputs.properties(props)
+    filteringCharset = "UTF-8"
+    filesMatching("bungee.yml") {
+        expand(props)
+    }
+}
+
 tasks.shadowJar {
     relocate("com.alessiodp.libby", "studio.mevera.synapse.shade.libby")
     archiveFileName.set("synapse-${project.name}-${project.version}.jar")

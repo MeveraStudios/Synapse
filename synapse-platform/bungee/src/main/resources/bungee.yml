@@ -1,4 +1,4 @@
 name: Synapse
 main: studio.mevera.synapse.BungeePlugin
-version: 1.0.0
+version: ${version}
 author: iiAhmedYT
