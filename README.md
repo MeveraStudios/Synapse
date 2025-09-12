@@ -338,7 +338,7 @@ We welcome contributions to Synapse! Here's how you can help:
 
 ### Areas We Need Help
 
-- 🔌 **New Platform Support**: Velocity, Fabric, Forge implementations
+- 🔌 **New Platform Support**: Fabric, Forge implementations
 - 📝 **Documentation**: Improving guides and examples
 - 🧪 **Testing**: Expanding test coverage
 - 🐛 **Bug Reports**: Finding and reporting issues

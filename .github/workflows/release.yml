@@ -5,10 +5,22 @@ on:
     types: [published]
 
 jobs:
-  build:
+  cleanup:
     runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: 🗑 Delete deployment
+        uses: strumwolf/delete-deployment-environment@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: Maven Central
+          onlyRemoveDeployments: true
+  release:
+    runs-on: ubuntu-latest
+    environment: Maven Central
     permissions:
       contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 21
