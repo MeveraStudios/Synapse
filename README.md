@@ -4,7 +4,7 @@
 [![Java](https://img.shields.io/badge/Java-21+-orange.svg)](https://openjdk.java.net/)
 [![Gradle](https://img.shields.io/badge/Gradle-8.x-blue.svg)](https://gradle.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.0-brightgreen.svg)](https://github.com/MeveraStudios/Synapse/releases)
+[![Release](https://img.shields.io/github/v/release/MeveraStudios/Synapse)](https://github.com/MeveraStudios/Synapse/releases)
 
 > A powerful, modular placeholder translation system designed for dynamic text processing across multiple platforms.
 
@@ -71,7 +71,7 @@ Synapse is a high-performance, extensible placeholder translation framework that
 <dependency>
     <groupId>studio.mevera</groupId>
     <artifactId>synapse-core</artifactId>
-    <version>1.0</version>
+    <version>VERSION-HERE</version>
 </dependency>
 ```
 
@@ -79,9 +79,9 @@ Synapse is a high-performance, extensible placeholder translation framework that
 
 ```kotlin
 dependencies {
-    implementation("studio.mevera:synapse-core:1.0")
+    implementation("studio.mevera:synapse-core:VERSION-HERE")
     // For Bukkit platform
-    implementation("studio.mevera:synapse-bukkit:1.0")
+    implementation("studio.mevera:synapse-bukkit:VERSION-HERE")
 }
 ```
 
