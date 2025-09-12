@@ -37,9 +37,11 @@ public abstract class AdventureNeuronBase<U extends User> extends NeuronBase<U> 
         final TagResolver.Builder builder = TagResolver.builder();
         for (final Placeholder<U> placeholder : this.placeholders.values()) {
             if (placeholder.isRelational()) continue;
-            builder.tag(placeholder.name(), (argumentQueue, context) -> {
-                return Tag.preProcessParsed(placeholder.resolve(toContext(placeholder.name(), argumentQueue, context)));
-            });
+            for (final String namespace : this.namespace.getNames()) {
+                builder.tag((namespace.isEmpty() ? "" : (namespace + "_")) + placeholder.name(), (argumentQueue, context) -> {
+                    return Tag.preProcessParsed(placeholder.resolve(toContext(placeholder.name(), argumentQueue, context)));
+                });
+            }
         }
         this.resolver = builder.build();
     }

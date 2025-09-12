@@ -21,7 +21,7 @@ public final class PAPIHook extends PlaceholderExpansion implements Relational {
 
     public PAPIHook(final BukkitNeuron neuron) {
         this.neuron = neuron;
-        this.namespace = neuron.namespace().firstName().orElseThrow(() -> new IllegalArgumentException("There was no namespace found for a registered neuron"));
+        this.namespace = neuron.namespace().firstName();
     }
 
     @Override

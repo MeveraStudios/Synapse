@@ -37,7 +37,7 @@ public class BungeeNeuron extends AdventureNeuronBase<BungeeUser> {
         return new BasicContex<>(
                 BungeeSynapse.get().asUser(target),
                 tag,
-                namespace.firstName().orElseThrow(),
+                namespace.firstName(),
                 args.toArray(String[]::new)
         );
     }

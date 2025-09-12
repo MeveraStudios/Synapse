@@ -1,7 +1,6 @@
 package studio.mevera.synapse.platform;
 
 import java.util.Collection;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -45,8 +44,8 @@ public final class Namespace {
         }
     }
 
-    public Optional<String> firstName() {
-        return this.names.stream().findFirst();
+    public String firstName() {
+        return this.names.stream().findFirst().orElseThrow(() -> new IllegalArgumentException("Namespace cannot be empty"));
     }
 
     public Set<String> getNames() {

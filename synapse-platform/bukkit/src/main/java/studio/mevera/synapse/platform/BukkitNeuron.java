@@ -46,7 +46,7 @@ public class BukkitNeuron extends AdventureNeuronBase<BukkitUser> {
         return new BasicContex<>(
                 BukkitSynapse.get().asUser(target),
                 tag,
-                namespace.firstName().orElseThrow(),
+                namespace.firstName(),
                 args.toArray(String[]::new)
         );
     }

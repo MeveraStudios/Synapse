@@ -33,7 +33,7 @@ public class VelocityNeuron extends AdventureNeuronBase<VelocityUser> {
         return new BasicContex<>(
                 VelocitySynapse.get().asUser(target),
                 tag,
-                namespace.firstName().orElseThrow(),
+                namespace.firstName(),
                 args.toArray(String[]::new)
         );
     }
