@@ -11,3 +11,8 @@ dependencies {
     api(project(":synapse-core"))
     compileOnlyApi("net.kyori:adventure-text-minimessage:${adventureVersion}")
 }
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}

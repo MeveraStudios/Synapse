@@ -8,19 +8,15 @@ import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.proxy.ProxyServer;
-import lombok.Getter;
 import org.slf4j.Logger;
 import studio.mevera.synapse.internal.VelocityInternalNeuron;
 
 @Plugin(id = "synapse", name = "Synapse", version = "1.0.0", authors = {"iiAhmedYT"})
 public final class VelocityPlugin {
 
-    @Getter
     private static VelocityPlugin instance;
 
-    @Getter
     private final ProxyServer server;
-    @Getter
     private final PluginContainer container;
     private final Logger logger;
 
@@ -47,4 +43,17 @@ public final class VelocityPlugin {
     public void onDisconnect(final DisconnectEvent event) {
         VelocitySynapse.get().onDisconnect(event);
     }
+
+    public static VelocityPlugin getInstance() {
+        return instance;
+    }
+
+    public ProxyServer getServer() {
+        return server;
+    }
+
+    public PluginContainer getContainer() {
+        return container;
+    }
+
 }

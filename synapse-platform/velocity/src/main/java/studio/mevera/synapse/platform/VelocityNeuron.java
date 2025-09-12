@@ -2,7 +2,6 @@ package studio.mevera.synapse.platform;
 
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.plugin.PluginContainer;
-import lombok.Getter;
 import studio.mevera.synapse.VelocitySynapse;
 import studio.mevera.synapse.context.Context;
 import studio.mevera.synapse.context.type.BasicContex;
@@ -10,7 +9,6 @@ import studio.mevera.synapse.context.type.BasicContex;
 import java.util.LinkedList;
 import java.util.List;
 
-@Getter
 public class VelocityNeuron extends AdventureNeuronBase<VelocityUser> {
 
     private final PluginContainer plugin;
@@ -38,5 +36,9 @@ public class VelocityNeuron extends AdventureNeuronBase<VelocityUser> {
                 namespace.firstName().orElseThrow(),
                 args.toArray(String[]::new)
         );
+    }
+
+    public PluginContainer getPlugin() {
+        return plugin;
     }
 }

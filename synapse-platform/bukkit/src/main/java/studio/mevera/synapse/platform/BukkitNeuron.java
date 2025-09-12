@@ -1,6 +1,5 @@
 package studio.mevera.synapse.platform;
 
-import lombok.Getter;
 import net.kyori.adventure.identity.Identity;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
@@ -12,7 +11,6 @@ import studio.mevera.synapse.context.type.BasicContex;
 import java.util.LinkedList;
 import java.util.List;
 
-@Getter
 public class BukkitNeuron extends AdventureNeuronBase<BukkitUser> {
 
     private final Plugin plugin;
@@ -51,6 +49,14 @@ public class BukkitNeuron extends AdventureNeuronBase<BukkitUser> {
                 namespace.firstName().orElseThrow(),
                 args.toArray(String[]::new)
         );
+    }
+
+    public Plugin getPlugin() {
+        return plugin;
+    }
+
+    public boolean isPapiHooked() {
+        return papiHooked;
     }
 
 }

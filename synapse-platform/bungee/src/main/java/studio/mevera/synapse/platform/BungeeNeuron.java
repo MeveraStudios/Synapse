@@ -1,6 +1,5 @@
 package studio.mevera.synapse.platform;
 
-import lombok.Getter;
 import net.kyori.adventure.identity.Identity;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -11,7 +10,6 @@ import studio.mevera.synapse.context.type.BasicContex;
 import java.util.LinkedList;
 import java.util.List;
 
-@Getter
 public class BungeeNeuron extends AdventureNeuronBase<BungeeUser> {
 
     private final Plugin plugin;
@@ -44,4 +42,7 @@ public class BungeeNeuron extends AdventureNeuronBase<BungeeUser> {
         );
     }
 
+    public Plugin getPlugin() {
+        return plugin;
+    }
 }

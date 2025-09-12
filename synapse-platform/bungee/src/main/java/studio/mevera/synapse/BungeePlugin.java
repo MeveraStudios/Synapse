@@ -1,6 +1,5 @@
 package studio.mevera.synapse;
 
-import lombok.Getter;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -9,7 +8,6 @@ import studio.mevera.synapse.internal.BungeeInternalNeuron;
 
 public final class BungeePlugin extends Plugin implements Listener {
 
-    @Getter
     private static BungeePlugin instance;
 
     @Override
@@ -27,5 +25,9 @@ public final class BungeePlugin extends Plugin implements Listener {
     @EventHandler
     public void onDisconnect(final PlayerDisconnectEvent event) {
         BungeeSynapse.get().onDisconnect(event);
+    }
+
+    public static BungeePlugin getInstance() {
+        return instance;
     }
 }

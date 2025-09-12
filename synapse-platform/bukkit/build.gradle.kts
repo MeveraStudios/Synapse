@@ -1,6 +1,5 @@
 plugins {
     id("java")
-    id("io.freefair.lombok") version "8.14"
     id("com.gradleup.shadow") version "8.3.8"
 }
 
@@ -32,6 +31,11 @@ dependencies {
 
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT")
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
 }
 
 tasks.shadowJar {

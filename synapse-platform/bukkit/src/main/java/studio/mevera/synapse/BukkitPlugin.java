@@ -1,7 +1,6 @@
 package studio.mevera.synapse;
 
 import studio.mevera.synapse.internal.BukkitInternalNeuron;
-import lombok.Getter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -10,7 +9,6 @@ import studio.mevera.synapse.util.LibraryLoader;
 
 public final class BukkitPlugin extends JavaPlugin implements Listener {
 
-    @Getter
     private static BukkitPlugin instance;
 
     @Override
@@ -19,6 +17,10 @@ public final class BukkitPlugin extends JavaPlugin implements Listener {
         LibraryLoader.loadLibraries();
         BukkitSynapse.get().registerNeuron(new BukkitInternalNeuron());
         getServer().getPluginManager().registerEvents(this, this);
+    }
+
+    public static BukkitPlugin getInstance() {
+        return instance;
     }
 
     @Override
