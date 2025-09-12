@@ -35,5 +35,6 @@ java {
 }
 
 tasks.shadowJar {
+    relocate("com.alessiodp.libby", "studio.mevera.synapse.shade.libby")
     archiveFileName.set("synapse-${project.name}-${project.version}.jar")
 }
