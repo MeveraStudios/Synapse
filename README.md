@@ -47,23 +47,6 @@ Synapse is a high-performance, extensible placeholder translation framework that
 - 🧪 **Comprehensive Testing**: Extensive test suite ensuring reliability
 - 🔙 **PAPI Backward-Compatibility**: In Bukkit you could just call BukkitNeuron#hookToPAPI and we will do the rest
 
-## 🏗️ Architecture
-
-Synapse follows a layered architecture pattern:
-
-```
-┌─────────────────────────────────────┐
-│           Platform Layer            │
-│     (Bukkit, Velocity, etc.)        │
-├─────────────────────────────────────┤
-│            Core Layer               │
-│    (Synapse Interface & Base)       │
-├─────────────────────────────────────┤
-│          Utility Layer              │
-│  (Caching, Regex, Array Utils)      │
-└─────────────────────────────────────┘
-```
-
 ## 🚀 Getting Started
 
 ### Prerequisites
