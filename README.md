@@ -346,7 +346,7 @@ We welcome contributions to Synapse! Here's how you can help:
 
 ## 📄 License
 
-This project is licensed under a very permissive Attribution License. You may use, modify, and distribute the code for any purpose, but you must mention "Synapse by Mevera Studio" in your documentation, source code, or distribution materials if you copy or use substantial portions of this code.
+This project is licensed under a very permissive Attribution License. You may use, modify, and distribute the code for any purpose, but you must mention "Synapse by Mevera Studios" in your documentation, source code, or distribution materials if you copy or use substantial portions of this code.
 
 See the [LICENSE](LICENSE) file for details.
 
@@ -354,7 +354,7 @@ See the [LICENSE](LICENSE) file for details.
 
 - Thanks to all contributors who have helped shape Synapse
 - Inspired by the need for a modern, type-safe placeholder system
-- Built with ❤️ by the Mevera Studio team
+- Built with ❤️ by the Mevera Studios team
 
 ## 📞 Support
 
@@ -367,7 +367,7 @@ See the [LICENSE](LICENSE) file for details.
 
 <div align="center">
 
-**Made with ❤️ by [iiAhmedYT](https://github.com/iiAhmedYT) and the Mevera Studio team**
+**Made with ❤️ by [iiAhmedYT](https://github.com/iiAhmedYT) and the Mevera Studios team**
 
 [⭐ Star this repo](https://github.com/MeveraStudios/Synapse) • [🐛 Report Bug](https://github.com/MeveraStudios/Synapse/issues) • [💡 Request Feature](https://github.com/MeveraStudios/Synapse/issues)
 

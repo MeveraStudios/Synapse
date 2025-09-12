@@ -6,6 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import studio.mevera.synapse.util.LibraryLoader;
+import studio.mevera.synapse.util.Utilities;
 
 public final class BukkitPlugin extends JavaPlugin implements Listener {
 
@@ -13,10 +14,13 @@ public final class BukkitPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        getLogger().info(Utilities.HYPHEN);
+        getLogger().info(Utilities.ASCII_ART);
         instance = this;
         LibraryLoader.loadLibraries();
         BukkitSynapse.get().registerNeuron(new BukkitInternalNeuron());
         getServer().getPluginManager().registerEvents(this, this);
+        getLogger().info(Utilities.HYPHEN);
     }
 
     public static BukkitPlugin getInstance() {

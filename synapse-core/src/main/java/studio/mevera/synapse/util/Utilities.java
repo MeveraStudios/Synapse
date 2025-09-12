@@ -7,7 +7,8 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public final class Utilities {
 
-    private final String ASCII_ART = """
+    public static final String HYPHEN = "#########################################################";
+    public static final String ASCII_ART = """
               ____                                  \s
              / ___| _   _ _ __   __ _ _ __  ___  ___\s
              \\___ \\| | | | '_ \\ / _` | '_ \\/ __|/ _ \\

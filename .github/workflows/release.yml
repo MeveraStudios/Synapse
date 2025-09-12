@@ -33,7 +33,7 @@ jobs:
       - name: Grant execute permissions to gradlew
         run: chmod +x gradlew
       - name: Build & Test
-        run: ./gradlew clean build shadowJar publishToMavenCentral
+        run: ./gradlew clean build shadowJar publishAndReleaseToMavenCentral
       - name: Upload release assets
         uses: softprops/action-gh-release@v1
         env:
