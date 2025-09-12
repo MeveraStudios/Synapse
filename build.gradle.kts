@@ -57,4 +57,10 @@ subprojects {
         }
     }
 
+    afterEvaluate {
+        tasks.named("generateMetadataFileForMavenPublication") {
+            mustRunAfter("plainJavadocJar", "sourcesJar")
+        }
+    }
+
 }
