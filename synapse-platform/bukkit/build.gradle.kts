@@ -1,5 +1,5 @@
 plugins {
-    id("java")
+    id("java-library")
     id("com.gradleup.shadow") version "8.3.8"
 }
 
@@ -26,7 +26,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":synapse-platform:adventure"))
+    api(project(":synapse-platform:adventure"))
     implementation("com.alessiodp.libby:libby-bukkit:2.0.0-SNAPSHOT")
 
     compileOnly("me.clip:placeholderapi:2.11.6")

@@ -1,5 +1,5 @@
 plugins {
-    id("java")
+    id("java-library")
     id("com.gradleup.shadow") version "8.3.8"
 }
 
@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":synapse-platform:adventure"))
+    api(project(":synapse-platform:adventure"))
     compileOnly("net.md-5:bungeecord-api:1.20-R0.3-SNAPSHOT")
 }
 

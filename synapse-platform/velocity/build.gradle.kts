@@ -1,5 +1,5 @@
 plugins {
-    id("java")
+    id("java-library")
     id("com.gradleup.shadow") version "8.3.8"
 }
 
@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":synapse-platform:adventure"))
+    api(project(":synapse-platform:adventure"))
     compileOnly("com.velocitypowered:velocity-api:3.1.1")
 }
 
