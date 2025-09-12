@@ -22,5 +22,5 @@ java {
 }
 
 tasks.shadowJar {
-    archiveFileName.set("synapse-${'$'}{project.name}-${'$'}{project.version}.jar")
+    archiveFileName.set("synapse-${project.name}-${project.version}.jar")
 }

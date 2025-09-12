@@ -21,7 +21,7 @@ jobs:
       - name: Grant execute permissions to gradlew
         run: chmod +x gradlew
       - name: Build & Test
-        run: ./gradlew shadowJar test --no-daemon
+        run: ./gradlew clean build shadowJar publishToMavenCentral
       - name: Upload release assets
         uses: softprops/action-gh-release@v1
         env:
