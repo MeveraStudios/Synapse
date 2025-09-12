@@ -6,7 +6,7 @@ repositories {
     mavenCentral()
 }
 
-val adventureVersion = "4.21.0"
+val adventureVersion = "4.24.0"
 dependencies {
     api(project(":synapse-core"))
     compileOnlyApi("net.kyori:adventure-text-minimessage:${adventureVersion}")

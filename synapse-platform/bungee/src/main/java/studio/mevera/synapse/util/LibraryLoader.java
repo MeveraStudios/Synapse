@@ -1,10 +1,10 @@
 package studio.mevera.synapse.util;
 
-import com.alessiodp.libby.BukkitLibraryManager;
+import com.alessiodp.libby.BungeeLibraryManager;
 import com.alessiodp.libby.Library;
 import com.alessiodp.libby.LibraryManager;
 import com.alessiodp.libby.relocation.Relocation;
-import studio.mevera.synapse.BukkitPlugin;
+import studio.mevera.synapse.BungeePlugin;
 
 import java.util.function.Supplier;
 
@@ -20,7 +20,7 @@ public enum LibraryLoader {
     );
     // ========================================================= //
 
-    private static final LibraryManager MANAGER = new BukkitLibraryManager(BukkitPlugin.getInstance());
+    private static final LibraryManager MANAGER = new BungeeLibraryManager(BungeePlugin.getInstance());
 
     static {
         MANAGER.addMavenCentral();

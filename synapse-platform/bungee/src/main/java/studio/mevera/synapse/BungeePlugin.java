@@ -5,6 +5,7 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.event.EventHandler;
 import studio.mevera.synapse.internal.BungeeInternalNeuron;
+import studio.mevera.synapse.util.LibraryLoader;
 import studio.mevera.synapse.util.Utilities;
 
 public final class BungeePlugin extends Plugin implements Listener {
@@ -16,6 +17,7 @@ public final class BungeePlugin extends Plugin implements Listener {
         getLogger().info(Utilities.HYPHEN);
         getLogger().info(Utilities.ASCII_ART);
         instance = this;
+        LibraryLoader.loadLibraries();
         getProxy().getPluginManager().registerListener(this, this);
         BungeeSynapse.get().registerNeuron(new BungeeInternalNeuron());
         getLogger().info(Utilities.HYPHEN);
