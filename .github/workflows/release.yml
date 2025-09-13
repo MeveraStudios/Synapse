@@ -2,7 +2,7 @@ name: Release 🧠 Synapse 💪
 
 on:
   release:
-    types: [published]
+    types: [ created ]
 
 jobs:
   cleanup:
