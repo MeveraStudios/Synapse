@@ -27,7 +27,7 @@ subprojects {
         val key = System.getenv("ORG_GRADLE_PROJECT_signingInMemoryKey")?.replace("\\n", "\n")
         val password = System.getenv("ORG_GRADLE_PROJECT_signingInMemoryKeyPassword")
 
-        if (key != null && password != null) {
+        if (!key.isNullOrEmpty() && !password.isNullOrEmpty()) {
             useInMemoryPgpKeys(key, password)
             sign(publishing.publications)
         }
