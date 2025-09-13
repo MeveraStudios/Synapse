@@ -52,7 +52,7 @@ subprojects {
 
 
         if (!gradle.startParameter.taskNames.any { (it == "publishToMavenLocal") }) {
-            publishToMavenCentral(automaticRelease = true)
+            publishToMavenCentral()
             signAllPublications()
         }
     }
