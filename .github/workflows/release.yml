@@ -47,5 +47,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: |
-            synapse-core/build/libs/*.jar
-            synapse-platform/**/build/libs/synapse-*.jar
+            synapse-platform/bukkit/build/libs/synapse-*.jar
+            synapse-platform/bungee/build/libs/synapse-*.jar
+            synapse-platform/velocity/build/libs/synapse-*.jar
