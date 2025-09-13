@@ -14,5 +14,4 @@ dependencies {
 
 java {
     withSourcesJar()
-    withJavadocJar()
 }

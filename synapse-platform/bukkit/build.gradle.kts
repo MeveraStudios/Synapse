@@ -35,7 +35,6 @@ dependencies {
 
 java {
     withSourcesJar()
-    withJavadocJar()
 }
 
 tasks.processResources {
