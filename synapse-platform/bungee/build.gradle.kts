@@ -22,11 +22,13 @@ repositories {
     }
 }
 
+val hiddenShadowed: Configuration by configurations.creating
 dependencies {
     api(project(":synapse-platform:adventure"))
-    implementation("com.alessiodp.libby:libby-bungee:2.0.0-SNAPSHOT")
 
     compileOnly("net.md-5:bungeecord-api:1.20-R0.3-SNAPSHOT")
+    compileOnly("com.alessiodp.libby:libby-bungee:2.0.0-SNAPSHOT")
+    hiddenShadowed("com.alessiodp.libby:libby-bungee:2.0.0-SNAPSHOT")
 }
 
 java {
@@ -43,6 +45,7 @@ tasks.processResources {
 }
 
 tasks.shadowJar {
+    from(hiddenShadowed.map { zipTree(it) }) // physically include it
     relocate("com.alessiodp.libby", "studio.mevera.synapse.shade.libby")
     archiveFileName.set("synapse-${project.name}-${project.version}.jar")
 }

@@ -25,12 +25,15 @@ repositories {
     }
 }
 
+val hiddenShadowed: Configuration by configurations.creating
 dependencies {
     api(project(":synapse-platform:adventure"))
-    implementation("com.alessiodp.libby:libby-bukkit:2.0.0-SNAPSHOT")
 
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT")
+
+    compileOnly("com.alessiodp.libby:libby-bukkit:2.0.0-SNAPSHOT")
+    hiddenShadowed("com.alessiodp.libby:libby-bukkit:2.0.0-SNAPSHOT")
 }
 
 java {
@@ -47,6 +50,7 @@ tasks.processResources {
 }
 
 tasks.shadowJar {
+    from(hiddenShadowed.map { zipTree(it) }) // physically include it
     relocate("com.alessiodp.libby", "studio.mevera.synapse.shade.libby")
     archiveFileName.set("synapse-${project.name}-${project.version}.jar")
 }
