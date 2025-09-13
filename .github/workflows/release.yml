@@ -33,7 +33,7 @@ jobs:
       - name: Grant execute permissions to gradlew
         run: chmod +x gradlew
       - name: Build & Test
-        run: ./gradlew clean build shadowJar publishToMavenCentral
+        run: ./gradlew clean build shadowJar publishToMavenCentral --stacktrace
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_USERNAME }}
