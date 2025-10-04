@@ -3,6 +3,7 @@ package studio.mevera.synapse.platform;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.ConsoleCommandSource;
 import com.velocitypowered.api.proxy.Player;
+import studio.mevera.synapse.error.impl.IgnoreException;
 
 import java.util.UUID;
 
@@ -40,9 +41,31 @@ public class VelocityUser extends UserBase {
         return this.source instanceof Player;
     }
 
+    public Player requirePlayer() {
+        if (!this.isPlayer()) {
+            throw new IgnoreException();
+        }
+        return this.asPlayer();
+    }
+
+    public Player asPlayer() {
+        return (Player) this.source;
+    }
+
     @Override
     public boolean isConsole() {
         return this.source instanceof ConsoleCommandSource;
+    }
+
+    public ConsoleCommandSource requireConsole() {
+        if (!this.isConsole()) {
+            throw new IgnoreException();
+        }
+        return this.asConsole();
+    }
+
+    public ConsoleCommandSource asConsole() {
+        return (ConsoleCommandSource) this.source;
     }
 
     @Override
@@ -50,11 +73,4 @@ public class VelocityUser extends UserBase {
         return this.isConsole() || ((Player) this.source).isActive();
     }
 
-    public Player asPlayer() {
-        return (Player) this.source;
-    }
-
-    public ConsoleCommandSource asConsole() {
-        return (ConsoleCommandSource) this.source;
-    }
 }

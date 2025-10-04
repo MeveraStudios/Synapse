@@ -3,6 +3,7 @@ package studio.mevera.synapse.platform;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import studio.mevera.synapse.error.impl.IgnoreException;
 
 import java.util.UUID;
 
@@ -42,22 +43,36 @@ public class BukkitUser extends UserBase {
         return this.sender instanceof Player;
     }
 
-    @Override
-    public boolean isConsole() {
-        return this.sender instanceof ConsoleCommandSender;
-    }
-
-    @Override
-    public boolean isConnected() {
-        return this.isConsole() || ((Player) this.sender).isOnline();
+    public Player requirePlayer() {
+        if (!this.isPlayer()) {
+            throw new IgnoreException();
+        }
+        return this.asPlayer();
     }
 
     public Player asPlayer() {
         return (Player) this.sender;
     }
 
+    @Override
+    public boolean isConsole() {
+        return this.sender instanceof ConsoleCommandSender;
+    }
+
+    public ConsoleCommandSender requireConsole() {
+        if (!this.isConsole()) {
+            throw new IgnoreException();
+        }
+        return this.asConsole();
+    }
+
     public ConsoleCommandSender asConsole() {
         return (ConsoleCommandSender) this.sender;
+    }
+
+    @Override
+    public boolean isConnected() {
+        return this.isConsole() || ((Player) this.sender).isOnline();
     }
 
 }
