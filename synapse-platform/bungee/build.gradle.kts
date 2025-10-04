@@ -26,7 +26,7 @@ val hiddenShadowed: Configuration by configurations.creating
 dependencies {
     api(project(":synapse-platform:adventure"))
 
-    compileOnly("net.md-5:bungeecord-api:1.20-R0.3-SNAPSHOT")
+    compileOnly("net.md-5:bungeecord-api:1.21-R0.4-SNAPSHOT")
     compileOnly("com.alessiodp.libby:libby-bungee:2.0.0-SNAPSHOT")
     hiddenShadowed("com.alessiodp.libby:libby-bungee:2.0.0-SNAPSHOT")
 }
