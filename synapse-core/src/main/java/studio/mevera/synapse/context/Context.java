@@ -42,4 +42,18 @@ public interface Context<U extends User> {
         return false;
     }
 
+    /**
+     * Overrides the message associated with this context.
+     *
+     * @param replacement the new message to set
+     */
+    void overrideMessage(final String replacement);
+
+    /**
+     * Overrides the placeholder associated with this context.
+     *
+     * @param replacement the new message to set
+     */
+    void overridePlaceholder(final String replacement);
+
 }

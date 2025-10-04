@@ -16,6 +16,7 @@ import java.util.*;
 public class NeuronRegistry<U extends User, N extends Neuron<U>> {
 
     private final Map<String, N> neurons = new HashMap<>();
+    private final Set<N> uniqueNeurons = new HashSet<>();
 
     /**
      * Registers a neuron with the given namespace.
@@ -33,6 +34,7 @@ public class NeuronRegistry<U extends User, N extends Neuron<U>> {
         for (final String ns : namespace.getNames()) {
             neurons.put(ns, neuron);
         }
+        uniqueNeurons.add(neuron);
     }
 
     /**
@@ -51,7 +53,7 @@ public class NeuronRegistry<U extends User, N extends Neuron<U>> {
      * @return a set of all neurons
      */
     public Collection<N> getNeurons() {
-        return neurons.values();
+        return Collections.unmodifiableCollection(uniqueNeurons);
     }
 
 }

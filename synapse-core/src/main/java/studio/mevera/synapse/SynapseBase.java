@@ -1,6 +1,8 @@
 package studio.mevera.synapse;
 
 import studio.mevera.synapse.context.type.RelationalContex;
+import studio.mevera.synapse.error.ResolveResult;
+import studio.mevera.synapse.error.ThrowableResolverRegistry;
 import studio.mevera.synapse.manager.NeuronRegistry;
 import studio.mevera.synapse.context.type.BasicContex;
 import studio.mevera.synapse.context.Context;
@@ -22,6 +24,7 @@ import java.util.regex.Matcher;
 public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implements Synapse<O, U, N> {
 
     protected final NeuronRegistry<U, N> neuronRegistry = new NeuronRegistry<>();
+    protected final ThrowableResolverRegistry<U> throwableResolverRegistry = new ThrowableResolverRegistry<>();
 
     @Override
     public String translate(final String text, final U user) {
@@ -44,10 +47,28 @@ public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implem
 
             final String[] args = RegexUtil.extractArguments(matcher.group(2));
             final Context<U> context = new BasicContex<>(user, tag, namespace, args);
-            final String replacement = neuron.onRequest(tag.substring(namespace.length() + 1), context);
 
-            if (replacement != null) {
-                matcher.appendReplacement(result, Matcher.quoteReplacement(replacement));
+            try {
+                final String replacement = neuron.onRequest(tag.substring(namespace.length() + 1), context);
+
+                if (replacement != null) {
+                    matcher.appendReplacement(result, Matcher.quoteReplacement(replacement));
+                }
+            } catch (final Throwable e) {
+                if (this.throwableResolverRegistry.hasResolver(e.getClass())) {
+                    final ResolveResult resolveResult = this.throwableResolverRegistry.resolve(e, context);
+                    if (resolveResult == null) {
+                        throw e; // Should not happen, but just in case
+                    } else if (resolveResult.type() == ResolveResult.Type.MESSAGE) {
+                        return resolveResult.content();
+                    } else if (resolveResult.type() == ResolveResult.Type.PLACEHOLDER) {
+                        matcher.appendReplacement(result, Matcher.quoteReplacement(resolveResult.content()));
+                        continue;
+                    } else if (resolveResult.type() == ResolveResult.Type.IGNORE) {
+                        continue;
+                    }
+                }
+                throw e;
             }
         }
 
@@ -76,10 +97,28 @@ public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implem
 
             final String[] args = RegexUtil.extractArguments(matcher.group(2));
             final Context<U> context = new RelationalContex<>(user, other, tag, namespace, args);
-            final String replacement = neuron.onRequest(tag.substring(namespace.length() + 1), context);
 
-            if (replacement != null) {
-                matcher.appendReplacement(result, Matcher.quoteReplacement(replacement));
+            try {
+                final String replacement = neuron.onRequest(tag.substring(namespace.length() + 1), context);
+
+                if (replacement != null) {
+                    matcher.appendReplacement(result, Matcher.quoteReplacement(replacement));
+                }
+            } catch (final Throwable e) {
+                if (this.throwableResolverRegistry.hasResolver(e.getClass())) {
+                    final ResolveResult resolveResult = this.throwableResolverRegistry.resolve(e, context);
+                    if (resolveResult == null) {
+                        throw e; // Should not happen, but just in case
+                    } else if (resolveResult.type() == ResolveResult.Type.MESSAGE) {
+                        return resolveResult.content();
+                    } else if (resolveResult.type() == ResolveResult.Type.PLACEHOLDER) {
+                        matcher.appendReplacement(result, Matcher.quoteReplacement(resolveResult.content()));
+                        continue;
+                    } else if (resolveResult.type() == ResolveResult.Type.IGNORE) {
+                        continue;
+                    }
+                }
+                throw e;
             }
         }
 
