@@ -44,6 +44,11 @@ public interface Neuron<U extends User> {
     boolean isRegistered(String tag);
 
     /**
+     * Registers the neuron itself onto Synapse.
+     */
+    void register();
+
+    /**
      * Registers a placeholder with this neuron.
      *
      * @param placeholder the placeholder to register

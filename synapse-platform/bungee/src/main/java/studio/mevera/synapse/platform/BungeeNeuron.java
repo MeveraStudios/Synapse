@@ -20,6 +20,11 @@ public class BungeeNeuron extends AdventureNeuronBase<BungeeUser> {
     }
 
     @Override
+    public void register() {
+        BungeeSynapse.get().registerNeuron(this);
+    }
+
+    @Override
     protected Context<BungeeUser> toContext(
             final String tag,
             net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue queue,

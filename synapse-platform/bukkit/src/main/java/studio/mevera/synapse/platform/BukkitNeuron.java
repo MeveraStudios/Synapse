@@ -21,6 +21,11 @@ public class BukkitNeuron extends AdventureNeuronBase<BukkitUser> {
         this.plugin = plugin;
     }
 
+    @Override
+    public void register() {
+        BukkitSynapse.get().registerNeuron(this);
+    }
+
     public void hookToPAPI() {
         if (plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI") && !papiHooked) {
             new PAPIHook(this).register();

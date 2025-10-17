@@ -19,6 +19,11 @@ public class VelocityNeuron extends AdventureNeuronBase<VelocityUser> {
     }
 
     @Override
+    public void register() {
+        VelocitySynapse.get().registerNeuron(this);
+    }
+
+    @Override
     protected Context<VelocityUser> toContext(
             final String tag,
             net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue queue,
