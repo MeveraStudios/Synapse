@@ -9,9 +9,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public final class TestNeuron extends NeuronBase<TestUser> {
 
-    public TestNeuron() {
+    private final TestSynapse synapse;
+
+    public TestNeuron(final TestSynapse synapse) {
         super(Namespace.of("test"));
 
+        this.synapse = synapse;
         // static placeholders
         AtomicInteger i = new AtomicInteger();
         this.register("meows", () -> "refreshes: " + i.getAndIncrement(), options -> options.async(true).delay(500, TimeUnit.MILLISECONDS).refresh(true));
@@ -31,6 +34,11 @@ public final class TestNeuron extends NeuronBase<TestUser> {
         });
 
         this.registerRelational("compare", context -> context.user().name() + "-" + context.other().name());
+    }
+
+    @Override
+    public void register() {
+        this.synapse.registerNeuron(this);
     }
 
 }

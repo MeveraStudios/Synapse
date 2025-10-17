@@ -20,7 +20,7 @@ public class DefaultBehaviorTests {
 
     @BeforeAll
     public static void setup() {
-        testSynapse.registerNeuron(new TestNeuron());
+        new TestNeuron(testSynapse).register();
     }
 
     @Test
