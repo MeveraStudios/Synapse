@@ -14,13 +14,12 @@ public final class BungeePlugin extends Plugin implements Listener {
 
     @Override
     public void onEnable() {
-        getLogger().info(Utilities.HYPHEN);
-        getLogger().info(Utilities.ASCII_ART);
+        getLogger().info("\n" + Utilities.HYPHEN + "\n" + Utilities.ASCII_ART);
         instance = this;
         LibraryLoader.loadLibraries();
         getProxy().getPluginManager().registerListener(this, this);
         BungeeSynapse.get().registerNeuron(new BungeeInternalNeuron());
-        getLogger().info(Utilities.HYPHEN);
+        getLogger().info("\n" + Utilities.HYPHEN);
     }
 
     @Override

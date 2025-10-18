@@ -30,12 +30,12 @@ public final class VelocityPlugin {
 
     @Subscribe
     public void onInit(final ProxyInitializeEvent event) {
-        logger.info(Utilities.HYPHEN);
+        logger.info("\n" + Utilities.HYPHEN + "\n" + Utilities.ASCII_ART);
         logger.info(Utilities.ASCII_ART);
         instance = this;
         this.server.getEventManager().register(this, this);
         VelocitySynapse.get().registerNeuron(new VelocityInternalNeuron());
-        logger.info(Utilities.HYPHEN);
+        logger.info("\n" + Utilities.HYPHEN);
     }
 
     @Subscribe
