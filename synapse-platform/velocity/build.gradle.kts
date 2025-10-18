@@ -24,7 +24,7 @@ tasks.processResources {
     val props = mapOf("version" to version)
     inputs.properties(props)
     filteringCharset = "UTF-8"
-    filesMatching("velocity.json") {
+    filesMatching("velocity-plugin.json") {
         expand(props)
     }
 }
