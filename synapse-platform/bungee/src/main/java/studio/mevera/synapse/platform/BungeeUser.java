@@ -3,6 +3,7 @@ package studio.mevera.synapse.platform;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import studio.mevera.synapse.error.impl.IgnoreException;
+import studio.mevera.synapse.error.impl.PlaceholderException;
 
 import java.util.UUID;
 
@@ -44,8 +45,24 @@ public class BungeeUser extends UserBase {
         return this.asPlayer();
     }
 
+    public ProxiedPlayer requirePlayer(String message) {
+        if (!this.isPlayer()) {
+            throw new PlaceholderException(message);
+        }
+        return this.asPlayer();
+    }
+
     public ProxiedPlayer asPlayer() {
         return (ProxiedPlayer) this.sender;
+    }
+
+    @Override
+    public boolean isConsole() {
+        return !this.isPlayer();
+    }
+
+    public CommandSender asConsole() {
+        return this.sender;
     }
 
     public CommandSender requireConsole() {
@@ -55,9 +72,11 @@ public class BungeeUser extends UserBase {
         return this.asConsole();
     }
 
-    @Override
-    public boolean isConsole() {
-        return !this.isPlayer();
+    public CommandSender requireConsole(String message) {
+        if (!this.isConsole()) {
+            throw new PlaceholderException(message);
+        }
+        return this.asConsole();
     }
 
     @Override
@@ -65,7 +84,4 @@ public class BungeeUser extends UserBase {
         return this.isConsole() || ((ProxiedPlayer) this.sender).isConnected();
     }
 
-    public CommandSender asConsole() {
-        return this.sender;
-    }
 }

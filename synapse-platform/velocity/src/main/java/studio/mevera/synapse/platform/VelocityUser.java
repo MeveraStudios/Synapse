@@ -4,6 +4,7 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.ConsoleCommandSource;
 import com.velocitypowered.api.proxy.Player;
 import studio.mevera.synapse.error.impl.IgnoreException;
+import studio.mevera.synapse.error.impl.PlaceholderException;
 
 import java.util.UUID;
 
@@ -41,6 +42,10 @@ public class VelocityUser extends UserBase {
         return this.source instanceof Player;
     }
 
+    public Player asPlayer() {
+        return (Player) this.source;
+    }
+
     public Player requirePlayer() {
         if (!this.isPlayer()) {
             throw new IgnoreException();
@@ -48,13 +53,20 @@ public class VelocityUser extends UserBase {
         return this.asPlayer();
     }
 
-    public Player asPlayer() {
-        return (Player) this.source;
+    public Player requirePlayer(String message) {
+        if (!this.isPlayer()) {
+            throw new PlaceholderException(message);
+        }
+        return this.asPlayer();
     }
 
     @Override
     public boolean isConsole() {
         return this.source instanceof ConsoleCommandSource;
+    }
+
+    public ConsoleCommandSource asConsole() {
+        return (ConsoleCommandSource) this.source;
     }
 
     public ConsoleCommandSource requireConsole() {
@@ -64,8 +76,11 @@ public class VelocityUser extends UserBase {
         return this.asConsole();
     }
 
-    public ConsoleCommandSource asConsole() {
-        return (ConsoleCommandSource) this.source;
+    public ConsoleCommandSource requireConsole(String message) {
+        if (!this.isConsole()) {
+            throw new PlaceholderException(message);
+        }
+        return this.asConsole();
     }
 
     @Override

@@ -4,6 +4,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import studio.mevera.synapse.error.impl.IgnoreException;
+import studio.mevera.synapse.error.impl.PlaceholderException;
 
 import java.util.UUID;
 
@@ -50,6 +51,13 @@ public class BukkitUser extends UserBase {
         return this.asPlayer();
     }
 
+    public Player requirePlayer(String message) {
+        if (!this.isPlayer()) {
+            throw new PlaceholderException(message);
+        }
+        return this.asPlayer();
+    }
+
     public Player asPlayer() {
         return (Player) this.sender;
     }
@@ -59,6 +67,10 @@ public class BukkitUser extends UserBase {
         return this.sender instanceof ConsoleCommandSender;
     }
 
+    public ConsoleCommandSender asConsole() {
+        return (ConsoleCommandSender) this.sender;
+    }
+
     public ConsoleCommandSender requireConsole() {
         if (!this.isConsole()) {
             throw new IgnoreException();
@@ -66,8 +78,11 @@ public class BukkitUser extends UserBase {
         return this.asConsole();
     }
 
-    public ConsoleCommandSender asConsole() {
-        return (ConsoleCommandSender) this.sender;
+    public ConsoleCommandSender requireConsole(String message) {
+        if (!this.isConsole()) {
+            throw new PlaceholderException(message);
+        }
+        return this.asConsole();
     }
 
     @Override
