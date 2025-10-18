@@ -44,13 +44,13 @@ tasks.processResources {
     val props = mapOf("version" to version)
     inputs.properties(props)
     filteringCharset = "UTF-8"
-    filesMatching("bukkit.yml") {
+    filesMatching("plugin.yml") {
         expand(props)
     }
 }
 
 tasks.shadowJar {
-    from(hiddenShadowed.map { zipTree(it) }) // physically include it
+    configurations.add(hiddenShadowed)
     relocate("com.alessiodp.libby", "studio.mevera.synapse.shade.libby")
     archiveFileName.set("synapse-${project.name}-${project.version}.jar")
 }

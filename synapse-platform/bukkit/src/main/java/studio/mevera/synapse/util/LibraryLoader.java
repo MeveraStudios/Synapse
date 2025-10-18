@@ -15,8 +15,14 @@ public enum LibraryLoader {
     MINI_MESSAGE(
             "net.kyori",
             "adventure-text-minimessage",
-            "4.24.0",
+            "4.25.0",
             () -> !Utilities.findClass(String.join(".", "net", "kyori", "adventure", "text", "minimessage", "MiniMessage"))
+    ),
+    LEGACY_COMPONENT_SERIALIZER(
+            "net.kyori",
+            "adventure-text-serializer-legacy",
+            "4.25.0",
+            () -> !Utilities.findClass(String.join(".", "net", "kyori", "adventure", "text", "serializer", "legacy", "LegacyComponentSerializer"))
     );
     // ========================================================= //
 

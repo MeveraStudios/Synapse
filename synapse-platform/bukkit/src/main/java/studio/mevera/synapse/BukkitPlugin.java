@@ -14,13 +14,12 @@ public final class BukkitPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        getLogger().info(Utilities.HYPHEN);
-        getLogger().info(Utilities.ASCII_ART);
+        getLogger().info("\n" + Utilities.HYPHEN + "\n" + Utilities.ASCII_ART);
         instance = this;
         LibraryLoader.loadLibraries();
         BukkitSynapse.get().registerNeuron(new BukkitInternalNeuron());
         getServer().getPluginManager().registerEvents(this, this);
-        getLogger().info(Utilities.HYPHEN);
+        getLogger().info("\n" + Utilities.HYPHEN);
     }
 
     public static BukkitPlugin getInstance() {
