@@ -1,6 +1,7 @@
 package studio.mevera.synapse.platform;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,9 +36,9 @@ public final class Namespace {
     private final Set<String> names;
 
     private Namespace(final Collection<String> names) {
-        this.names = names.stream().
-                map(String::toLowerCase)
-                .collect(Collectors.toSet());
+        this.names = names.stream()
+                .map(String::toLowerCase)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
 
         if (this.names.isEmpty()) {
             throw new IllegalArgumentException("Namespace cannot be empty");

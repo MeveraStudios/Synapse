@@ -12,7 +12,7 @@ public class BasicContex<U extends User> implements Context<U> {
     private final String namespace;
     private final String[] arguments;
 
-    public BasicContex(U user, String tag, String namespace, String[] arguments) {
+    public BasicContex(U user, String tag, String namespace, String... arguments) {
         this.user = user;
         this.tag = tag;
         this.namespace = namespace;

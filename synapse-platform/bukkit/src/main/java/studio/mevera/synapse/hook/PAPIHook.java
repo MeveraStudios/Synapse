@@ -49,60 +49,111 @@ public final class PAPIHook extends PlaceholderExpansion implements Relational {
             final Player player,
             final @NotNull String params
     ) {
-        if (player == null) {
+        if (player == null || params.isEmpty()) {
             return null;
         }
 
-        final BukkitUser user = BukkitSynapse.get().asUser(player);
-        final String[] splitParams = params.split("_");
-        final String tag = splitParams[0];
+        try {
+            final BukkitUser user = BukkitSynapse.get().asUser(player);
 
-        if (!this.neuron.isRegistered(tag)) {
+            // Fast path: check full string first (most common case)
+            if (this.neuron.isRegistered(params)) {
+                return this.neuron.onRequest(params, new BasicContex<>(
+                        user,
+                        params,
+                        this.namespace
+                ));
+            }
+
+            // Slow path: split and try progressively shorter names
+            final String[] parts = params.split("_");
+            if (parts.length == 1) {
+                return null; // Already tried above
+            }
+
+            // Start from second-longest (we already tried full string)
+            for (int i = parts.length - 1; i > 0; i--) {
+                final String tag = String.join("_", Arrays.copyOfRange(parts, 0, i));
+
+                if (this.neuron.isRegistered(tag)) {
+                    final String[] args = Arrays.copyOfRange(parts, i, parts.length);
+
+                    final Context<BukkitUser> context = new BasicContex<>(
+                            user,
+                            tag,
+                            this.namespace,
+                            args
+                    );
+
+                    return this.neuron.onRequest(tag, context);
+                }
+            }
+
+            return null;
+        } catch (Exception e) {
+            this.neuron.getPlugin().getLogger().warning(
+                    "Error processing PAPI placeholder '" + params + "': " + e.getMessage()
+            );
             return null;
         }
-
-        final Context<BukkitUser> context = new BasicContex<>(
-                user,
-                tag,
-                this.namespace,
-                this.skipOne(splitParams)
-        );
-
-        return this.neuron.onRequest(tag, context);
     }
 
     @Override
-    public String onPlaceholderRequest(final Player one, final Player two, final String params) {
-        if (one == null || two == null) {
+    public @Nullable String onPlaceholderRequest(
+            final Player one,
+            final Player two,
+            final @NotNull String params
+    ) {
+        if (one == null || two == null || params.isEmpty()) {
             return null;
         }
 
-        final BukkitUser user = BukkitSynapse.get().asUser(one);
-        final BukkitUser other = BukkitSynapse.get().asUser(two);
+        try {
+            final BukkitUser user = BukkitSynapse.get().asUser(one);
+            final BukkitUser other = BukkitSynapse.get().asUser(two);
 
-        final String[] splitParams = params.split("_");
-        final String tag = splitParams[0];
+            // Fast path: check full string first (most common case)
+            if (this.neuron.isRegistered(params)) {
+                return this.neuron.onRequest(params, new RelationalContex<>(
+                        user,
+                        other,
+                        params,
+                        this.namespace
+                ));
+            }
 
-        if (!this.neuron.isRegistered(tag)) {
+            // Slow path: split and try progressively shorter names
+            final String[] parts = params.split("_");
+            if (parts.length == 1) {
+                return null; // Already tried above
+            }
+
+            // Start from second-longest (we already tried full string)
+            for (int i = parts.length - 1; i > 0; i--) {
+                final String tag = String.join("_", Arrays.copyOfRange(parts, 0, i));
+
+                if (this.neuron.isRegistered(tag)) {
+                    final String[] args = Arrays.copyOfRange(parts, i, parts.length);
+
+                    final Context<BukkitUser> context = new RelationalContex<>(
+                            user,
+                            other,
+                            tag,
+                            this.namespace,
+                            args
+                    );
+
+                    return this.neuron.onRequest(tag, context);
+                }
+            }
+
+            return null;
+        } catch (Exception e) {
+            this.neuron.getPlugin().getLogger().warning(
+                    "Error processing PAPI relational placeholder '" + params + "': " + e.getMessage()
+            );
             return null;
         }
-
-        final Context<BukkitUser> context = new RelationalContex<>(
-                user,
-                other,
-                tag,
-                this.namespace,
-                this.skipOne(splitParams)
-        );
-
-        return this.neuron.onRequest(tag, context);
-    }
-
-    private String[] skipOne(final String[] array) {
-        if (array.length <= 1) {
-            return new String[0];
-        }
-        return Arrays.copyOfRange(array, 1, array.length);
     }
 
 }

@@ -6,7 +6,7 @@ public class RelationalContex<U extends User> extends BasicContex<U> {
 
     private final U other;
 
-    public RelationalContex(U user, U other, String tag, String namespace, String[] arguments) {
+    public RelationalContex(U user, U other, String tag, String namespace, String... arguments) {
         super(user, tag, namespace, arguments);
         this.other = other;
     }
