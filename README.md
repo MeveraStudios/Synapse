@@ -3,23 +3,35 @@
 
 [![Java](https://img.shields.io/badge/Java-21+-orange.svg)](https://openjdk.java.net/)
 [![Gradle](https://img.shields.io/badge/Gradle-8.x-blue.svg)](https://gradle.org/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-Attribution-green.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/MeveraStudios/Synapse)](https://github.com/MeveraStudios/Synapse/releases)
 
 > A powerful, modular placeholder translation system designed for dynamic text processing across multiple platforms.
 
 ## 📋 Table of Contents
 
+- [Why Synapse?](#-why-synapse)
 - [Overview](#-overview)
 - [Features](#-features)
-- [Architecture](#-architecture)
+- [Documentation](https://docs.mevera.studio/Synapse/)
 - [Getting Started](#-getting-started)
-- [Usage Examples](#-usage-examples)
 - [Platform Support](#-platform-support)
 - [Building](#-building)
 - [Contributing](#-contributing)
 - [License](#-license)
 
+---
+## 🤔 Why Synapse?
+
+Compared to traditional placeholder systems:
+
+- ✨ **Modern API**: Built with Java 21+ features and best practices
+- 🎯 **Type-Safe**: No runtime surprises with strongly-typed generics
+- ⚡ **Performance**: Smart caching and async-first design
+- 🔌 **Multi-Platform**: One API works across Bukkit, Bungee, and Velocity
+- 🧪 **Well-Tested**: Comprehensive test suite for reliability
+
+---
 ## 🌟 Overview
 
 Synapse is a high-performance, extensible placeholder translation framework that enables dynamic text processing with context-aware placeholder resolution. Built with a clean, modular architecture, Synapse supports multiple platforms while maintaining type safety and excellent performance through intelligent caching mechanisms.
@@ -31,6 +43,7 @@ Synapse is a high-performance, extensible placeholder translation framework that
 - **🏷️ Namespaces**: Organized categorization system for placeholder management
 - **⚡ Async Support**: Built-in asynchronous processing capabilities for non-blocking operations
 
+---
 ## ✨ Features
 
 ### Core Features
@@ -46,8 +59,10 @@ Synapse is a high-performance, extensible placeholder translation framework that
 - 🔗 **Relational Placeholders**: Placeholders that resolve values based on relationships between 2 Users
 - 💾 **Intelligent Caching**: Built-in caching mechanisms with expiration support
 - 🧪 **Comprehensive Testing**: Extensive test suite ensuring reliability
-- 🔙 **PAPI Backward-Compatibility**: In Bukkit you could just call BukkitNeuron#hookToPAPI and we will do the rest
+- 🔙 **PAPI Backward-Compatibility**: In Bukkit, you can simply call BukkitNeuron#hookToPAPI and we will do the rest
+- 🎨 **Adventure Integration**: First-class MiniMessage support with custom tag resolvers
 
+---
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -56,226 +71,96 @@ Synapse is a high-performance, extensible placeholder translation framework that
 - **Gradle 8.x** (For building)
 - **Your target platform** (e.g., Paper/Spigot for Bukkit)
 
+---
 ### Installation
 
-#### For Bukkit/Paper Servers
+#### For Bukkit/Bungee/Velocity Servers
 
-1. Download the latest `synapse-bukkit-*.*.jar` from [Releases](https://github.com/MeveraStudios/Synapse/releases)
+1. Download the latest `synapse-PLATFORM-*.*.jar` from [Releases](https://github.com/MeveraStudios/Synapse/releases)
 2. Place the JAR in your server's `plugins/` directory
 3. Restart your server
 4. Configure as needed
+---
+### For Developers
+#### 📦 Adding to Your Project
 
-#### For Developers (Maven)
+**Gradle (Kotlin DSL)**
+```kotlin
+repositories {
+    mavenCentral()
+}
 
+dependencies {
+    compileOnly("studio.mevera:synapse-bukkit:VERSION") // Replace VERSION
+}
+```
+
+**Gradle (Groovy)**
+```groovy
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'studio.mevera:synapse-bukkit:VERSION' // Replace VERSION
+}
+```
+
+**Maven**
 ```xml
 <dependency>
     <groupId>studio.mevera</groupId>
-    <artifactId>synapse-core</artifactId>
-    <version>VERSION-HERE</version>
+    <artifactId>synapse-bukkit</artifactId>
+    <version>VERSION</version> <!-- Replace VERSION -->
+    <scope>provided</scope>
 </dependency>
 ```
 
-#### For Developers (Gradle)
-
-```kotlin
-dependencies {
-    implementation("studio.mevera:synapse-core:VERSION-HERE")
-    // For Bukkit platform
-    implementation("studio.mevera:synapse-bukkit:VERSION-HERE")
-}
-```
-
-### Quick Start
-
+> 💡 **Note**: Use `compileOnly`/`provided` scope since Synapse is already on the server. Replace `VERSION` with the [latest release](https://github.com/MeveraStudios/Synapse/releases).
+#### 💻 Quick Example
 ```java
-// Obtain the Synapse instance for Bukkit
-BukkitSynapse synapse = BukkitSynapse.get();
-
-// Register neurons with Synapse
-synapse.registerNeuron(new ServerNeuron());
-synapse.registerNeuron(new CustomNeuron());
-
-// Synchronous translation with contextual placeholder
-String result = synapse.translate("Hello ${player.name}!", player);
-
-// Synchronous translation with static placeholder
-String version = synapse.translate("Running Synapse v${server.version}", player);
-
-// Asynchronous translation
-synapse.translateAsync("Loading ${server.online} players...", console)
-    .thenAccept(console::sendMessage);
-```
-
-## 💡 Usage Examples
-
-### Static vs Contextual Placeholders
-
-Static placeholders are registered inside neurons and do not require user context. Contextual placeholders depend on runtime data (like player info) and are also registered inside neurons.
-
-```java
-// Define a neuron for static placeholders
-public class ServerNeuron extends BukkitNeuron {
-    public ServerNeuron() {
-        super(Namespace.of("server"));
-        register("version", () -> "1.21.6");
-    }
-}
-
-// Define a neuron for contextual placeholders
-public class PlayerNeuron extends BukkitNeuron {
-    public PlayerNeuron() {
-        super(Namespace.of("player"));
-        register("name", ctx -> ctx.user().getName());
-    }
-}
-
-// Register neurons
-synapse.registerNeuron(new ServerNeuron());
-synapse.registerNeuron(new PlayerNeuron());
-
-// Usage
-String version = synapse.translate("Running Synapse v${server.version}", player);
-String welcome = synapse.translate("Welcome ${player.name}!", player);
-```
-
-### Basic Placeholder Translation
-
-```java
-// Simple placeholder replacement
-String welcome = synapse.translate("Welcome ${player.name}!", player);
-// Result: "Welcome Steve!"
-
-// Multiple placeholders
-String status = synapse.translate("${player.name} has ${player.health} health", player);
-// Result: "Steve has 20.0 health"
-```
-
-### Custom Neuron Creation
-
-```java
-public class CustomNeuron extends BukkitNeuron {
-    public CustomNeuron() {
-        super(Namespace.of("custom"));
+// Create a custom neuron
+public class MyNeuron extends BukkitNeuron {
+    public MyNeuron(Plugin plugin) {
+        super(plugin, Namespace.of("custom"));
+        
         // Register placeholders
-        register("time", this::getCurrentTime);
-        register("weather", this::getWeather);
-    }
-    private String getCurrentTime(Context<BukkitUser> context) {
-        return LocalTime.now().toString();
-    }
-    private String getWeather(Context<BukkitUser> context) {
-        World world = context.user().getPlayer().getWorld();
-        return world.hasStorm() ? "Stormy" : "Clear";
-    }
-}
-```
-
-### Asynchronous Processing
-
-```java
-// Non-blocking placeholder resolution
-synapse.translateAsync("Loading ${database.playerCount} players...", console)
-    .thenAccept(result -> {
-        console.sendMessage(result);
-    })
-    .exceptionally(throwable -> {
-        console.sendMessage("Failed to load data: " + throwable.getMessage());
-        return null;
-    });
-```
-
-### Context-Aware Placeholders
-
-```java
-// Placeholders that depend on user context
-public class LocationNeuron extends BukkitNeuron {
-    public LocationNeuron() {
-        super(Namespace.of("location"));
-        register("x", ctx -> String.valueOf(ctx.user().getLocation().getX()));
-        register("y", ctx -> String.valueOf(ctx.user().getLocation().getY()));
-        register("z", ctx -> String.valueOf(ctx.user().getLocation().getZ()));
-        register("world", ctx -> ctx.user().getLocation().getWorld().getName());
+        register("hello", "Hello World!");
+        register("player_name", context -> context.user().getName());
     }
 }
 
-// Usage
-String location = synapse.translate("You are at ${location.x}, ${location.y}, ${location.z} in ${location.world}", player);
-```
-
-### Relational Placeholders
-
-Relational placeholders allow you to resolve values based on relationships between multiple context objects. For example, you can compare two users, or display information that depends on both a user and a server.
-
-```java
-// Define a relational neuron for comparing two users
-public class CompareUsersNeuron extends BukkitNeuron {
-    public CompareUsersNeuron() {
-        super(Namespace.of("compare"));
-        registerRelational("isSame", ctx -> ctx.user().getName().equals(ctx.other().getName()) ? "Same user" : "Different users");
-    }
-}
-
-// Register the neuron
-synapse.registerNeuron(new CompareUsersNeuron());
-
-// Usage: compare two players
-String result = synapse.translate("Comparison: ${compare.isSame}", player1, player2);
-// Result: "Comparison: Different users"
-```
-
-### Advanced Placeholder Customization
-
-You can further customize placeholders using the options builder in the `register` method. This allows you to enable async resolution, caching, refresh intervals, and more.
-
-```java
-public class CustomNeuron extends BukkitNeuron {
-    public CustomNeuron() {
-        super(Namespace.of("custom"));
-        AtomicInteger i = new AtomicInteger();
-        // Static placeholder with async and refresh
-        register("meows", () -> "refreshes: " + i.getAndIncrement(),
-            options -> options.async(true).delay(500, TimeUnit.MILLISECONDS).refresh(true));
-
-        // Contextual placeholder with caching and TTL
-        register("cached", ctx -> UUID.randomUUID().toString(),
-            options -> {
-                options.cache(true);
-                options.cacheTTL(50, TimeUnit.SECONDS);
-            });
-
-        // Contextual placeholder with custom argument parsing
-        register("arguments", ctx -> {
-            String[] args = ctx.arguments();
-            return "Arguments(" + args.length + "): " + String.join(", ", args);
-        });
-    }
+// Register and use
+@Override
+public void onEnable() {
+    new MyNeuron(this).register();
+    
+    BukkitSynapse synapse = BukkitSynapse.get();
+    String message = synapse.translate("${custom.hello}, ${custom.player_name}!", player);
+    player.sendMessage(message);
 }
 ```
+Check out the [Documentation](https://docs.mevera.studio/Synapse/) for detailed guides on integrating Synapse into your projects.
 
-**Features:**
-- `.cache(true)`: Caches the resolved value.
-- `.cacheTTL(ttl, unit)`: Sets cache time-to-live.
-- `.refresh(true)`: Enables periodic refresh of the value.
-- `.delay(ms, unit)`: Sets the delay between refreshes.
-- `.async(true)`: Resolves the placeholder asynchronously when refreshing.
-
+---
 ## 🎮 Platform Support
 
 ### Currently Supported
 
-| Platform         | Status | Module             | Version |
-|------------------|--------|--------------------|---------|
-| **Bukkit/Paper** | ✅ Stable | `synapse-bukkit`   | 1.21.6+ |
-| **Bungee**       | ✅ Stable | `synapse-bungee`   | ------- |
-| **Velocity**     | ✅ Stable | `synapse-velocity` | ------- |
+| Platform         | Status   | Module             | Version |
+|------------------|----------|--------------------|---------|
+| **Bukkit/Paper** | ✅ Stable | `synapse-bukkit`   | 1.8.8+  |
+| **Bungee**       | ✅ Stable | `synapse-bungee`   | Latest  |
+| **Velocity**     | ✅ Stable | `synapse-velocity` | 3.0+    |
 
 ### Planned Support
 
-| Platform | Status | ETA |
-|----------|--------|-----|
+| Platform   | Status     | ETA     |
+|------------|------------|---------|
 | **Fabric** | 📋 Planned | Q2 2026 |
-| **Forge** | 📋 Planned | Q2 2026 |
+| **Forge**  | 📋 Planned | Q2 2026 |
 
+---
 ## 🔧 Building
 
 ### Prerequisites
@@ -304,6 +189,8 @@ cd Synapse
 
 - `synapse-core/build/libs/synapse-core-x.x.jar` - Core library
 - `synapse-platform/bukkit/build/libs/synapse-bukkit-x.x.jar` - Bukkit plugin
+- `synapse-platform/bungee/build/libs/synapse-bungee-x.x.jar` - Bungee plugin
+- `synapse-platform/velocity/build/libs/synapse-velocity-x.x.jar` - Velocity plugin
 
 ### Development Setup
 
@@ -314,6 +201,7 @@ cd Synapse
 ./gradlew test
 ```
 
+---
 ## 🤝 Contributing
 
 We welcome contributions to Synapse! Here's how you can help:
@@ -345,18 +233,21 @@ We welcome contributions to Synapse! Here's how you can help:
 - 🐛 **Bug Reports**: Finding and reporting issues
 - 💡 **Feature Suggestions**: New ideas and improvements
 
+---
 ## 📄 License
 
 This project is licensed under a very permissive Attribution License. You may use, modify, and distribute the code for any purpose, but you must mention "Synapse by Mevera Studios" in your documentation, source code, or distribution materials if you copy or use substantial portions of this code.
 
 See the [LICENSE](LICENSE) file for details.
 
+---
 ## 🙏 Acknowledgments
 
 - Thanks to all contributors who have helped shape Synapse
 - Inspired by the need for a modern, type-safe placeholder system
 - Built with ❤️ by the Mevera Studios team
 
+---
 ## 📞 Support
 
 - 🐛 **Bug Reports**: [Create an issue](https://github.com/MeveraStudios/Synapse/issues)
