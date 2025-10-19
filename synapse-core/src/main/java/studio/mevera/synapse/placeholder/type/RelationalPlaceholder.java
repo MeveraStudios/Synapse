@@ -1,7 +1,7 @@
 package studio.mevera.synapse.placeholder.type;
 
 import studio.mevera.synapse.context.Context;
-import studio.mevera.synapse.context.type.RelationalContex;
+import studio.mevera.synapse.context.type.RelationalContext;
 import studio.mevera.synapse.placeholder.Placeholder;
 import studio.mevera.synapse.placeholder.PlaceholderOptionsBase;
 import studio.mevera.synapse.placeholder.PlaceholderOptionsBuilder;
@@ -10,20 +10,21 @@ import studio.mevera.synapse.platform.User;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class RelationalPlaceholder<U extends User> implements Placeholder<U> {
 
     private final String name;
-    private final ResolvingFunction<U> value;
+    private final Function<RelationalContext<U>, String> value;
     private final Options options;
 
-    public RelationalPlaceholder(String name, ResolvingFunction<U> value) {
+    public RelationalPlaceholder(String name, Function<RelationalContext<U>, String> value) {
         this.name = name;
         this.value = value;
         this.options = Options.DEFAULT;
     }
 
-    public RelationalPlaceholder(String name, ResolvingFunction<U> value, Consumer<Options.Builder> options) {
+    public RelationalPlaceholder(String name, Function<RelationalContext<U>, String> value, Consumer<Options.Builder> options) {
         this.name = name;
         this.value = value;
 
@@ -49,7 +50,7 @@ public class RelationalPlaceholder<U extends User> implements Placeholder<U> {
             return null;
         }
 
-        final var context = (RelationalContex<U>) unverifiedContext;
+        final var context = (RelationalContext<U>) unverifiedContext;
         final U other = context.other();
         if (other == null) {
             return null;
@@ -64,22 +65,17 @@ public class RelationalPlaceholder<U extends User> implements Placeholder<U> {
                 return cachedValue;
             }
 
-            final String resolvedValue = this.value.resolve(context);
+            final String resolvedValue = this.value.apply(context);
             user.cache(key, context.arguments(), resolvedValue, this.options.cacheTTLMillis());
             return resolvedValue;
         }
 
-        return this.value.resolve(context);
+        return this.value.apply(context);
     }
 
     @Override
     public boolean isRelational() {
         return true;
-    }
-
-    @FunctionalInterface
-    public interface ResolvingFunction<U extends User> {
-        String resolve(final RelationalContex<U> context);
     }
 
     public static final class Options extends PlaceholderOptionsBase {

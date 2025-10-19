@@ -9,14 +9,15 @@ import studio.mevera.synapse.platform.User;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class ContextualPlaceholder<U extends User> implements Placeholder<U> {
 
     private final String name;
-    private final ResolvingFunction<U> value;
+    private final Function<Context<U>, String> value;
     private final Options options;
 
-    public ContextualPlaceholder(final String name, final ResolvingFunction<U> value) {
+    public ContextualPlaceholder(final String name, final Function<Context<U>, String> value) {
         this.name = name;
         this.value = value;
         this.options = Options.DEFAULT;
@@ -24,7 +25,7 @@ public class ContextualPlaceholder<U extends User> implements Placeholder<U> {
 
     public ContextualPlaceholder(
             final String name,
-            final ResolvingFunction<U> value,
+            final Function<Context<U>, String> value,
             final Consumer<Options.Builder> options
     ) {
         this.name = name;
@@ -58,16 +59,12 @@ public class ContextualPlaceholder<U extends User> implements Placeholder<U> {
                 return cachedValue;
             }
 
-            final String resolvedValue = this.value.resolve(context);
+            final String resolvedValue = this.value.apply(context);
             user.cache(key, context.arguments(), resolvedValue, this.options.cacheTTLMillis());
             return resolvedValue;
         }
 
-        return this.value.resolve(context);
-    }
-
-    public interface ResolvingFunction<U extends User> {
-        String resolve(final Context<U> context);
+        return this.value.apply(context);
     }
 
     @Override

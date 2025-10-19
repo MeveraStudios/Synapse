@@ -1,6 +1,7 @@
 package studio.mevera.synapse.platform;
 
 import studio.mevera.synapse.context.Context;
+import studio.mevera.synapse.context.type.RelationalContext;
 import studio.mevera.synapse.placeholder.Placeholder;
 import studio.mevera.synapse.placeholder.type.ContextualPlaceholder;
 import studio.mevera.synapse.placeholder.type.RelationalPlaceholder;
@@ -11,6 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public abstract class NeuronBase<U extends User> implements Neuron<U> {
@@ -81,7 +83,7 @@ public abstract class NeuronBase<U extends User> implements Neuron<U> {
     @Override
     public void register(
             final String name,
-            final ContextualPlaceholder.ResolvingFunction<U> value,
+            final Function<Context<U>, String> value,
             final String... aliases
     ) {
         this.register(new ContextualPlaceholder<>(name, value), aliases);
@@ -90,7 +92,7 @@ public abstract class NeuronBase<U extends User> implements Neuron<U> {
     @Override
     public void register(
             final String name,
-            final ContextualPlaceholder.ResolvingFunction<U> value,
+            final Function<Context<U>, String> value,
             final Consumer<ContextualPlaceholder.Options.Builder> options,
             final String... aliases
     ) {
@@ -100,7 +102,7 @@ public abstract class NeuronBase<U extends User> implements Neuron<U> {
     @Override
     public void registerRelational(
             final String name,
-            final RelationalPlaceholder.ResolvingFunction<U> value,
+            final Function<RelationalContext<U>, String> value,
             final String... aliases
     ) {
         this.register(new RelationalPlaceholder<>(name, value), aliases);
@@ -109,7 +111,7 @@ public abstract class NeuronBase<U extends User> implements Neuron<U> {
     @Override
     public void registerRelational(
             final String name,
-            final RelationalPlaceholder.ResolvingFunction<U> value,
+            final Function<RelationalContext<U>, String> value,
             final Consumer<RelationalPlaceholder.Options.Builder> options,
             final String... aliases
     ) {
