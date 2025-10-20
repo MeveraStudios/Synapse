@@ -28,7 +28,9 @@ public class BukkitNeuron extends AdventureNeuronBase<BukkitUser> {
 
     public void hookToPAPI() {
         if (plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI") && !papiHooked) {
-            new PAPIHook(this).register();
+            for (final String namespace : this.namespace.getNames()) {
+                new PAPIHook(this, namespace).register();
+            }
             this.papiHooked = true;
         }
     }

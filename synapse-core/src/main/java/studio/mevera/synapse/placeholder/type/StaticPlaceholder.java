@@ -16,20 +16,20 @@ import java.util.function.Supplier;
 public final class StaticPlaceholder<U extends User> implements Placeholder<U> {
 
     private final String name;
-    private final Supplier<String> supplier;
+    private final Supplier<Object> supplier;
 
     private final Options options;
 
-    private String value;
+    private Object value;
     private ScheduledFuture<?> scheduledFuture;
 
-    public StaticPlaceholder(final String name, final String result) {
+    public StaticPlaceholder(final String name, final Object result) {
         this(name, () -> result);
     }
 
     public StaticPlaceholder(
             final String name,
-            final Supplier<String> supplier
+            final Supplier<Object> supplier
     ) {
         this.name = name;
         this.supplier = supplier;
@@ -40,7 +40,7 @@ public final class StaticPlaceholder<U extends User> implements Placeholder<U> {
 
     public StaticPlaceholder(
             final String name,
-            final Supplier<String> supplier,
+            final Supplier<Object> supplier,
             final Consumer<Options.Builder> options
     ) {
         this.name = name;
@@ -65,7 +65,7 @@ public final class StaticPlaceholder<U extends User> implements Placeholder<U> {
     }
 
     @Override
-    public String resolve(final Context<U> context) {
+    public Object resolve(final Context<U> context) {
         return this.value;
     }
 

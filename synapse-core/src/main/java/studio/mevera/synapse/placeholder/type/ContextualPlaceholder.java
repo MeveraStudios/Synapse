@@ -14,10 +14,10 @@ import java.util.function.Function;
 public class ContextualPlaceholder<U extends User> implements Placeholder<U> {
 
     private final String name;
-    private final Function<Context<U>, String> value;
+    private final Function<Context<U>, Object> value;
     private final Options options;
 
-    public ContextualPlaceholder(final String name, final Function<Context<U>, String> value) {
+    public ContextualPlaceholder(final String name, final Function<Context<U>, Object> value) {
         this.name = name;
         this.value = value;
         this.options = Options.DEFAULT;
@@ -25,7 +25,7 @@ public class ContextualPlaceholder<U extends User> implements Placeholder<U> {
 
     public ContextualPlaceholder(
             final String name,
-            final Function<Context<U>, String> value,
+            final Function<Context<U>, Object> value,
             final Consumer<Options.Builder> options
     ) {
         this.name = name;
@@ -47,19 +47,19 @@ public class ContextualPlaceholder<U extends User> implements Placeholder<U> {
     }
 
     @Override
-    public String resolve(final Context<U> context) {
+    public Object resolve(final Context<U> context) {
         Objects.requireNonNull(context);
 
         if (this.options.cache()) {
             final U user = context.user();
             final String key = context.namespace() + ":" + this.name;
 
-            final String cachedValue = user.getCachedValue(key, context.arguments());
+            final Object cachedValue = user.getCachedValue(key, context.arguments());
             if (cachedValue != null) {
                 return cachedValue;
             }
 
-            final String resolvedValue = this.value.apply(context);
+            final Object resolvedValue = this.value.apply(context);
             user.cache(key, context.arguments(), resolvedValue, this.options.cacheTTLMillis());
             return resolvedValue;
         }

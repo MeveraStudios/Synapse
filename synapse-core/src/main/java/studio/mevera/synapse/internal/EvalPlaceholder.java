@@ -18,7 +18,7 @@ public class EvalPlaceholder<U extends User> implements Placeholder<U> {
     }
 
     @Override
-    public String resolve(final Context<U> context) {
+    public Object resolve(final Context<U> context) {
         return "";
     }
 

@@ -15,16 +15,16 @@ import java.util.function.Function;
 public class RelationalPlaceholder<U extends User> implements Placeholder<U> {
 
     private final String name;
-    private final Function<RelationalContext<U>, String> value;
+    private final Function<RelationalContext<U>, Object> value;
     private final Options options;
 
-    public RelationalPlaceholder(String name, Function<RelationalContext<U>, String> value) {
+    public RelationalPlaceholder(String name, Function<RelationalContext<U>, Object> value) {
         this.name = name;
         this.value = value;
         this.options = Options.DEFAULT;
     }
 
-    public RelationalPlaceholder(String name, Function<RelationalContext<U>, String> value, Consumer<Options.Builder> options) {
+    public RelationalPlaceholder(String name, Function<RelationalContext<U>, Object> value, Consumer<Options.Builder> options) {
         this.name = name;
         this.value = value;
 
@@ -44,7 +44,7 @@ public class RelationalPlaceholder<U extends User> implements Placeholder<U> {
     }
 
     @Override
-    public String resolve(Context<U> unverifiedContext) {
+    public Object resolve(Context<U> unverifiedContext) {
         Objects.requireNonNull(unverifiedContext);
         if (!unverifiedContext.isRelational()) {
             return null;
@@ -60,12 +60,12 @@ public class RelationalPlaceholder<U extends User> implements Placeholder<U> {
             final U user = context.user();
             final String key = context.namespace() + ":" + this.name + ":" + other.uniqueId();
 
-            final String cachedValue = user.getCachedValue(key, context.arguments());
+            final Object cachedValue = user.getCachedValue(key, context.arguments());
             if (cachedValue != null) {
                 return cachedValue;
             }
 
-            final String resolvedValue = this.value.apply(context);
+            final Object resolvedValue = this.value.apply(context);
             user.cache(key, context.arguments(), resolvedValue, this.options.cacheTTLMillis());
             return resolvedValue;
         }

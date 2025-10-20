@@ -10,7 +10,7 @@ public class VelocityInternalNeuron extends VelocityNeuron implements InternalNe
 
     public VelocityInternalNeuron() {
         super(VelocityPlugin.getInstance().getContainer(), Namespace.of("synapse", ""));
-        this.register("player", context -> context.user().name());
         this.registerInternalPlaceholders();
     }
+
 }

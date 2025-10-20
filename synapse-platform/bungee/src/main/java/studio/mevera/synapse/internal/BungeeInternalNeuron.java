@@ -10,7 +10,6 @@ public class BungeeInternalNeuron extends BungeeNeuron implements InternalNeuron
 
     public BungeeInternalNeuron() {
         super(BungeePlugin.getInstance(), Namespace.of("synapse", ""));
-        this.register("player", context -> context.user().origin().getName());
         this.registerInternalPlaceholders();
     }
 }

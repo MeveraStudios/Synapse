@@ -62,7 +62,7 @@ public interface User {
     void cache(
             String key,
             String[] args,
-            String value,
+            Object value,
             long ttlMillis
     );
 
@@ -73,7 +73,7 @@ public interface User {
      * @param args the arguments associated with the key
      * @return the cached value, or null if not found
      */
-    String getCachedValue(
+    Object getCachedValue(
             String key,
             String[] args
     );

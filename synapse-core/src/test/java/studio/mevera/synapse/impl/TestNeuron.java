@@ -3,6 +3,7 @@ package studio.mevera.synapse.impl;
 import studio.mevera.synapse.platform.NeuronBase;
 import studio.mevera.synapse.platform.Namespace;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -21,7 +22,13 @@ public final class TestNeuron extends NeuronBase<TestUser> {
 
         // contextual placeholders
         this.register("hello", context -> "Hello there, " + context.user().origin().name() + "!");
+        this.register("optional", context -> Optional.of("Hello there, " + context.user().origin().name() + "!"));
         this.register("welcome", context -> "Welcome " + context.user().origin().name() + "! You have " + context.arguments()[0] + " new messages.");
+
+        // type tests
+        this.register("number", context -> 42);
+        this.register("boolean", context -> true);
+        this.register("collection", context -> java.util.List.of("one", "two", "three"));
 
         this.register("cached", context -> UUID.randomUUID().toString(), options -> {
             options.cache(true);

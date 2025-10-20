@@ -5,13 +5,13 @@ import studio.mevera.synapse.util.ExpiringTable;
 
 public abstract class UserBase implements User {
 
-    public final ExpiringTable<String, ArrayKey, String> cache = new ExpiringTable<>();
+    public final ExpiringTable<String, ArrayKey, Object> cache = new ExpiringTable<>();
 
     @Override
     public void cache(
             final String key,
             final String[] args,
-            final String value,
+            final Object value,
             final long ttlMillis
     ) {
         this.cache(key, ArrayKey.of(args), value, ttlMillis);
@@ -20,21 +20,21 @@ public abstract class UserBase implements User {
     public void cache(
             final String key,
             final ArrayKey args,
-            final String value,
+            final Object value,
             final long ttlMillis
     ) {
         this.cache.put(key, args, value, ttlMillis);
     }
 
     @Override
-    public String getCachedValue(
+    public Object getCachedValue(
             final String key,
             final String[] args
     ) {
         return this.getCachedValue(key, ArrayKey.of(args));
     }
 
-    public String getCachedValue(
+    public Object getCachedValue(
             final String key,
             final ArrayKey args
     ) {

@@ -10,7 +10,6 @@ public class BukkitInternalNeuron extends BukkitNeuron implements InternalNeuron
 
     public BukkitInternalNeuron() {
         super(BukkitPlugin.getInstance(), Namespace.of("synapse", ""));
-        this.register("player", context -> context.user().origin().getName());
         this.registerInternalPlaceholders();
     }
 

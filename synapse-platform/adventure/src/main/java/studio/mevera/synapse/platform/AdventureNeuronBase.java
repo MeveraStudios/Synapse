@@ -4,6 +4,7 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import studio.mevera.synapse.context.Context;
 import studio.mevera.synapse.placeholder.Placeholder;
+import studio.mevera.synapse.type.ComponentHandler;
 
 public abstract class AdventureNeuronBase<U extends User> extends NeuronBase<U> {
 
@@ -11,6 +12,12 @@ public abstract class AdventureNeuronBase<U extends User> extends NeuronBase<U> 
 
     public AdventureNeuronBase(final Namespace namespace) {
         super(namespace);
+    }
+
+    @Override
+    protected void initializeDefaultTypeHandlers() {
+        super.initializeDefaultTypeHandlers();
+        this.registerTypeHandler(new ComponentHandler());
     }
 
     public TagResolver getOrFormAdventureTag() {
@@ -39,7 +46,11 @@ public abstract class AdventureNeuronBase<U extends User> extends NeuronBase<U> 
             if (placeholder.isRelational()) continue;
             for (final String namespace : this.namespace.getNames()) {
                 builder.tag((namespace.isEmpty() ? "" : (namespace + "_")) + placeholder.name(), (argumentQueue, context) -> {
-                    return Tag.preProcessParsed(placeholder.resolve(toContext(placeholder.name(), argumentQueue, context)));
+                    return Tag.preProcessParsed(
+                            this.handleType(
+                                    placeholder.resolve(toContext(placeholder.name(), argumentQueue, context))
+                            )
+                    );
                 });
             }
         }

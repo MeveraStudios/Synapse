@@ -45,9 +45,31 @@ public class DefaultBehaviorTests {
     }
 
     @Test
+    public void testTypeHandling() {
+        Assertions.assertEquals(
+                "Hello there, TestUser!",
+                testSynapse.translate("${test.optional}", testOrigin)
+        );
+        Assertions.assertEquals(
+                "42",
+                testSynapse.translate("${test.number}", testOrigin)
+        );
+
+        Assertions.assertEquals(
+                "true",
+                testSynapse.translate("${test.boolean}", testOrigin)
+        );
+
+        Assertions.assertEquals(
+                "one, two, three",
+                testSynapse.translate("${test.collection}", testOrigin)
+        );
+    }
+
+    @Test
     public void testCaching() {
         String first = testSynapse.translate("${test.cached}", testOrigin);
-        String second = testUser.getCachedValue("test:cached", new String[]{});
+        Object second = testUser.getCachedValue("test:cached", new String[]{});
 
         Assertions.assertEquals(first, second, "The placeholder value should be cached and not change");
     }

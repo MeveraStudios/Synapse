@@ -1,8 +1,6 @@
 package studio.mevera.synapse.platform;
 
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -35,6 +33,9 @@ public final class Namespace {
 
     private final Set<String> names;
 
+    private final transient String firstNameCache;
+    private final transient String shortestNameCache;
+
     private Namespace(final Collection<String> names) {
         this.names = names.stream()
                 .map(String::toLowerCase)
@@ -43,18 +44,53 @@ public final class Namespace {
         if (this.names.isEmpty()) {
             throw new IllegalArgumentException("Namespace cannot be empty");
         }
+
+        this.firstNameCache = this.findFirstName();
+        this.shortestNameCache = this.findShortestName();
     }
 
+    /**
+     * Gets the first name in the namespace.
+     *
+     * @return the first name
+     */
     public String firstName() {
-        return this.names.stream().findFirst().orElseThrow(() -> new IllegalArgumentException("Namespace cannot be empty"));
+        return this.firstNameCache;
     }
 
+    /**
+     * Gets the shortest name in the namespace.
+     *
+     * @return the shortest name
+     */
+    public String shortestName() {
+        return this.shortestNameCache;
+    }
+
+    /**
+     * Gets the set of names in the namespace.
+     *
+     * @return the set of names
+     */
     public Set<String> getNames() {
         return names;
     }
 
+    /**
+     * Checks if the namespace is empty.
+     *
+     * @return true if the namespace is empty, false otherwise
+     */
     public boolean isEmpty() {
         return this.names.isEmpty();
+    }
+
+    private String findFirstName() {
+        return this.names.stream().findFirst().orElseThrow(() -> new IllegalArgumentException("Namespace cannot be empty"));
+    }
+
+    private String findShortestName() {
+        return this.names.stream().min(Comparator.comparingInt(String::length)).orElseThrow(() -> new IllegalArgumentException("Namespace cannot be empty"));
     }
 
 }

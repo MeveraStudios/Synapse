@@ -5,7 +5,7 @@ plugins {
 
 allprojects {
     group = "studio.mevera"
-    version = "1.1.1"
+    version = "1.2.0"
 
     val targetJavaVersion = 21
     tasks.withType<JavaCompile>().configureEach {
