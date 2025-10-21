@@ -24,4 +24,4 @@ jobs:
       - name: Grant execute permissions to gradlew
         run: chmod +x gradlew
       - name: Build & Test
-        run: ./gradlew shadowJar test --no-daemon
+        run: ./gradlew shadowJar test --no-daemon --parallel
