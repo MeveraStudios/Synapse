@@ -4,7 +4,7 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.plugin.PluginContainer;
 import studio.mevera.synapse.VelocitySynapse;
 import studio.mevera.synapse.context.Context;
-import studio.mevera.synapse.context.type.BasicContex;
+import studio.mevera.synapse.context.type.BasicContext;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class VelocityNeuron extends AdventureNeuronBase<VelocityUser> {
         }
 
         final var target = context.targetAsType(CommandSource.class);
-        return new BasicContex<>(
+        return new BasicContext<>(
                 VelocitySynapse.get().asUser(target),
                 tag,
                 namespace.firstName(),

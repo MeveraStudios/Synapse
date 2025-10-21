@@ -2,7 +2,7 @@ package studio.mevera.synapse.context.type;
 
 import studio.mevera.synapse.platform.User;
 
-public class RelationalContext<U extends User> extends BasicContex<U> {
+public class RelationalContext<U extends User> extends BasicContext<U> {
 
     private final U other;
 

@@ -5,14 +5,14 @@ import studio.mevera.synapse.error.impl.MessageException;
 import studio.mevera.synapse.error.impl.PlaceholderException;
 import studio.mevera.synapse.platform.User;
 
-public class BasicContex<U extends User> implements Context<U> {
+public class BasicContext<U extends User> implements Context<U> {
 
     private final U user;
     private final String tag;
     private final String namespace;
     private final String[] arguments;
 
-    public BasicContex(U user, String tag, String namespace, String... arguments) {
+    public BasicContext(U user, String tag, String namespace, String... arguments) {
         this.user = user;
         this.tag = tag;
         this.namespace = namespace;

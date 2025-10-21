@@ -6,7 +6,7 @@ import org.bukkit.plugin.Plugin;
 import studio.mevera.synapse.BukkitSynapse;
 import studio.mevera.synapse.hook.PAPIHook;
 import studio.mevera.synapse.context.Context;
-import studio.mevera.synapse.context.type.BasicContex;
+import studio.mevera.synapse.context.type.BasicContext;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -50,7 +50,7 @@ public class BukkitNeuron extends AdventureNeuronBase<BukkitUser> {
         final CommandSender target = uuid.isPresent()
                 ? plugin.getServer().getPlayer(uuid.get())
                 : plugin.getServer().getConsoleSender();
-        return new BasicContex<>(
+        return new BasicContext<>(
                 BukkitSynapse.get().asUser(target),
                 tag,
                 namespace.firstName(),

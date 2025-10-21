@@ -13,7 +13,7 @@ repositories {
 
 dependencies {
     api(project(":synapse-platform:adventure"))
-    compileOnly("com.velocitypowered:velocity-api:3.1.1")
+    compileOnly("com.velocitypowered:velocity-api:3.4.0-SNAPSHOT")
 }
 
 java {

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import studio.mevera.synapse.BukkitSynapse;
 import studio.mevera.synapse.context.Context;
-import studio.mevera.synapse.context.type.BasicContex;
+import studio.mevera.synapse.context.type.BasicContext;
 import studio.mevera.synapse.context.type.RelationalContext;
 import studio.mevera.synapse.platform.BukkitNeuron;
 import studio.mevera.synapse.platform.BukkitUser;
@@ -58,7 +58,7 @@ public final class PAPIHook extends PlaceholderExpansion implements Relational {
 
             // Fast path: check full string first (most common case)
             if (this.neuron.isRegistered(params)) {
-                return this.neuron.onRequest(params, new BasicContex<>(
+                return this.neuron.onRequest(params, new BasicContext<>(
                         user,
                         params,
                         this.namespace
@@ -78,7 +78,7 @@ public final class PAPIHook extends PlaceholderExpansion implements Relational {
                 if (this.neuron.isRegistered(tag)) {
                     final String[] args = Arrays.copyOfRange(parts, i, parts.length);
 
-                    final Context<BukkitUser> context = new BasicContex<>(
+                    final Context<BukkitUser> context = new BasicContext<>(
                             user,
                             tag,
                             this.namespace,

@@ -4,7 +4,7 @@ import studio.mevera.synapse.context.type.RelationalContext;
 import studio.mevera.synapse.error.ResolveResult;
 import studio.mevera.synapse.error.ThrowableResolverRegistry;
 import studio.mevera.synapse.manager.NeuronRegistry;
-import studio.mevera.synapse.context.type.BasicContex;
+import studio.mevera.synapse.context.type.BasicContext;
 import studio.mevera.synapse.context.Context;
 import studio.mevera.synapse.platform.Neuron;
 import studio.mevera.synapse.platform.User;
@@ -46,7 +46,7 @@ public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implem
             }
 
             final String[] args = RegexUtil.extractArguments(matcher.group(2));
-            final Context<U> context = new BasicContex<>(user, tag, namespace, args);
+            final Context<U> context = new BasicContext<>(user, tag, namespace, args);
 
             try {
                 final String replacement = neuron.onRequest(tag.substring(namespace.length() + 1), context);

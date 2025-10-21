@@ -26,13 +26,17 @@ repositories {
 }
 
 val hiddenShadowed: Configuration by configurations.creating
+configurations {
+    compileOnly {
+        extendsFrom(hiddenShadowed)
+    }
+}
 dependencies {
     api(project(":synapse-platform:adventure"))
 
     compileOnly("me.clip:placeholderapi:2.11.6")
-    compileOnly("io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.10-R0.1-SNAPSHOT")
 
-    compileOnly("com.alessiodp.libby:libby-bukkit:2.0.0-SNAPSHOT")
     hiddenShadowed("com.alessiodp.libby:libby-bukkit:2.0.0-SNAPSHOT")
 }
 

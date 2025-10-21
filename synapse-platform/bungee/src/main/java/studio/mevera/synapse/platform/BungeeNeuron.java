@@ -5,7 +5,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.Plugin;
 import studio.mevera.synapse.BungeeSynapse;
 import studio.mevera.synapse.context.Context;
-import studio.mevera.synapse.context.type.BasicContex;
+import studio.mevera.synapse.context.type.BasicContext;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -39,7 +39,7 @@ public class BungeeNeuron extends AdventureNeuronBase<BungeeUser> {
         final CommandSender target = uuid.isPresent()
                 ? plugin.getProxy().getPlayer(uuid.get())
                 : plugin.getProxy().getConsole();
-        return new BasicContex<>(
+        return new BasicContext<>(
                 BungeeSynapse.get().asUser(target),
                 tag,
                 namespace.firstName(),
