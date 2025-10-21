@@ -38,7 +38,7 @@ public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implem
         while (matcher.find()) {
             final String tag = matcher.group(1);
             final int dotIndex = tag.indexOf('.');
-            final String namespace = dotIndex == -1 ? tag : tag.substring(0, dotIndex);
+            final String namespace = dotIndex == -1 ? "" : tag.substring(0, dotIndex);
             final N neuron = this.neuronRegistry.getNeuron(namespace);
 
             if (neuron == null) {
@@ -88,7 +88,7 @@ public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implem
         while (matcher.find()) {
             final String tag = matcher.group(1);
             final int dotIndex = tag.indexOf('.');
-            final String namespace = dotIndex == -1 ? tag : tag.substring(0, dotIndex);
+            final String namespace = dotIndex == -1 ? "" : tag.substring(0, dotIndex);
             final N neuron = this.neuronRegistry.getNeuron(namespace);
 
             if (neuron == null) {
