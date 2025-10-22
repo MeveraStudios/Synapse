@@ -55,11 +55,9 @@ public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implem
                     matcher.appendReplacement(result, Matcher.quoteReplacement(replacement));
                 }
             } catch (final Throwable e) {
-                if (this.throwableResolverRegistry.hasResolver(e.getClass())) {
-                    final ResolveResult resolveResult = this.throwableResolverRegistry.resolve(e, context);
-                    if (resolveResult == null) {
-                        throw e; // Should not happen, but just in case
-                    } else if (resolveResult.type() == ResolveResult.Type.MESSAGE) {
+                final ResolveResult resolveResult = this.throwableResolverRegistry.resolve(e, context);
+                if (resolveResult != null) {
+                    if (resolveResult.type() == ResolveResult.Type.MESSAGE) {
                         return resolveResult.content();
                     } else if (resolveResult.type() == ResolveResult.Type.PLACEHOLDER) {
                         matcher.appendReplacement(result, Matcher.quoteReplacement(resolveResult.content()));
@@ -105,11 +103,9 @@ public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implem
                     matcher.appendReplacement(result, Matcher.quoteReplacement(replacement));
                 }
             } catch (final Throwable e) {
-                if (this.throwableResolverRegistry.hasResolver(e.getClass())) {
-                    final ResolveResult resolveResult = this.throwableResolverRegistry.resolve(e, context);
-                    if (resolveResult == null) {
-                        throw e; // Should not happen, but just in case
-                    } else if (resolveResult.type() == ResolveResult.Type.MESSAGE) {
+                final ResolveResult resolveResult = this.throwableResolverRegistry.resolve(e, context);
+                if (resolveResult != null) {
+                    if (resolveResult.type() == ResolveResult.Type.MESSAGE) {
                         return resolveResult.content();
                     } else if (resolveResult.type() == ResolveResult.Type.PLACEHOLDER) {
                         matcher.appendReplacement(result, Matcher.quoteReplacement(resolveResult.content()));

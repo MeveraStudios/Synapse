@@ -1,5 +1,6 @@
 package studio.mevera.synapse.impl;
 
+import studio.mevera.synapse.error.impl.IgnoreException;
 import studio.mevera.synapse.platform.NeuronBase;
 import studio.mevera.synapse.platform.Namespace;
 
@@ -38,6 +39,11 @@ public final class TestNeuron extends NeuronBase<TestUser> {
         this.register("arguments", context -> {
             final String[] args = context.arguments();
             return "Arguments(" + args.length + "): " + String.join(", ", args);
+        });
+
+        this.register("null", context -> null);
+        this.register("ignore", context -> {
+            throw new IgnoreException();
         });
 
         this.registerRelational("compare", context -> context.user().name() + "-" + context.other().name());

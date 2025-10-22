@@ -311,4 +311,37 @@ public class EdgeCaseTests {
         Assertions.assertNotNull(result);
     }
 
+    // ========== LEAVE AS-IS BUG TESTS ==========
+
+    @Test
+    public void testUnknownNamespacePreservesPlaceholder() {
+        // Bug: continue without appendReplacement removes placeholder
+        String input = "Hello ${unknown.namespace} World";
+        String result = testSynapse.translate(input, testOrigin);
+        Assertions.assertEquals("Hello ${unknown.namespace} World", result);
+    }
+
+    @Test
+    public void testNullReplacementPreservesPlaceholder() {
+        // Bug: continue when replacement == null removes placeholder
+        String input = "Value: ${test.null}";
+        String result = testSynapse.translate(input, testOrigin);
+        Assertions.assertEquals("Value: ${test.null}", result);
+    }
+
+    @Test
+    public void testIgnoreResolverPreservesPlaceholder() {
+        // Bug: IGNORE type uses continue, which removes placeholder
+        String input = "Error: ${test.ignore}";
+        String result = testSynapse.translate(input, testOrigin);
+        Assertions.assertEquals("Error: ${test.ignore}", result);
+    }
+
+    @Test
+    public void testMixedKnownAndUnknownPreserved() {
+        // Ensure bug doesn't break subsequent matches
+        String input = "${test.hello} ${unknown.tag} ${test.number}";
+        String result = testSynapse.translate(input, testOrigin);
+        Assertions.assertEquals("Hello there, TestUser! ${unknown.tag} 42", result);
+    }
 }
