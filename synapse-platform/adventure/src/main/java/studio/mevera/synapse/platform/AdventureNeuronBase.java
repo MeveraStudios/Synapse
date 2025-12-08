@@ -1,5 +1,6 @@
 package studio.mevera.synapse.platform;
 
+import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import studio.mevera.synapse.context.Context;
@@ -46,11 +47,14 @@ public abstract class AdventureNeuronBase<U extends User> extends NeuronBase<U> 
             if (placeholder.isRelational()) continue;
             for (final String namespace : this.namespace.getNames()) {
                 builder.tag((namespace.isEmpty() ? "" : (namespace + "_")) + placeholder.name(), (argumentQueue, context) -> {
-                    return Tag.preProcessParsed(
-                            this.handleType(
-                                    placeholder.resolve(toContext(placeholder.name(), argumentQueue, context))
-                            )
-                    );
+                    final Object resolved = placeholder.resolve(toContext(placeholder.name(), argumentQueue, context));
+                    if (resolved instanceof Tag tag) {
+                        return tag;
+                    }
+                    if (resolved instanceof ComponentLike component) {
+                        return Tag.inserting(component);
+                    }
+                    return Tag.preProcessParsed(this.handleType(resolved));
                 });
             }
         }
