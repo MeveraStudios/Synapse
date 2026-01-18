@@ -20,3 +20,8 @@ tasks.processResources {
         expand(props)
     }
 }
+
+tasks.jar {
+    archiveBaseName.set("synapse-hytale")
+    archiveVersion.set(version.toString())
+}

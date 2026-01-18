@@ -50,3 +50,4 @@ jobs:
             synapse-platform/bukkit/build/libs/synapse-*.jar
             synapse-platform/bungee/build/libs/synapse-*.jar
             synapse-platform/velocity/build/libs/synapse-*.jar
+            synapse-platform/hytale/build/libs/synapse-*.jar
