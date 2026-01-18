@@ -152,6 +152,7 @@ Check out the [Documentation](https://docs.mevera.studio/Synapse/) for detailed 
 | **Bukkit/Paper** | ✅ Stable | `synapse-bukkit`   | 1.8.8+  |
 | **Bungee**       | ✅ Stable | `synapse-bungee`   | Latest  |
 | **Velocity**     | ✅ Stable | `synapse-velocity` | 3.0+    |
+| **Hytale**       | ✅ Stable | `synapse-hytale`   | 1.0.0+  |
 
 ### Planned Support
 

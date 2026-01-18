@@ -1,0 +1,14 @@
+{
+  "Group": "studio.mevera",
+  "Name": "Synapse",
+  "Version": "${version}",
+  "Description": "",
+  "Main": "studio.mevera.synapse.HytalePlugin",
+  "Authors": [
+    {
+      "Name": "iiAhmedYT"
+    }
+  ],
+  "Website": "https://docs.mevera.studio",
+  "IncludesAssetPack": false
+}
