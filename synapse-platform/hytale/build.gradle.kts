@@ -1,5 +1,6 @@
 plugins {
     id("java-library")
+    id("com.gradleup.shadow") version "8.3.8"
 }
 
 repositories {
@@ -21,7 +22,6 @@ tasks.processResources {
     }
 }
 
-tasks.jar {
-    archiveBaseName.set("synapse-hytale")
-    archiveVersion.set(version.toString())
+tasks.shadowJar {
+    archiveFileName.set("synapse-${project.name}-${project.version}.jar")
 }
