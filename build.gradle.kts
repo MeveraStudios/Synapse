@@ -43,9 +43,9 @@ subprojects {
             url = "https://github.com/MeveraStudios/Synapse/"
             licenses {
                 license {
-                    name.set("MIT License")
-                    url = "https://opensource.org/licenses/MIT"
-                    distribution = "https://mit-license.org/"
+                    name.set("GNU Affero General Public License v3.0")
+                    url = "https://www.gnu.org/licenses/agpl-3.0.html"
+                    distribution = "repo"
                 }
             }
             developers {
