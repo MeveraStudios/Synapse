@@ -18,7 +18,7 @@ allprojects {
     }
 }
 
-extra["imperatVersion"] = "2.4.1"
+extra["imperatVersion"] = "2.4.2"
 
 subprojects {
     apply(plugin = "java")
