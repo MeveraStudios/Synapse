@@ -2,13 +2,11 @@ package studio.mevera.synapse.command.impl;
 
 import com.velocitypowered.api.proxy.Player;
 import studio.mevera.imperat.VelocitySource;
-import studio.mevera.imperat.annotations.Greedy;
-import studio.mevera.imperat.annotations.Permission;
-import studio.mevera.imperat.annotations.SubCommand;
-import studio.mevera.imperat.annotations.Usage;
+import studio.mevera.imperat.annotations.*;
 import studio.mevera.synapse.VelocitySynapse;
 import studio.mevera.synapse.util.SynapseHelpMessage;
 
+@Command("synapse")
 @Permission("synapse.admin")
 public class SynapseCommand {
 

@@ -6,12 +6,10 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
 import studio.mevera.imperat.HytaleSource;
-import studio.mevera.imperat.annotations.Greedy;
-import studio.mevera.imperat.annotations.Permission;
-import studio.mevera.imperat.annotations.SubCommand;
-import studio.mevera.imperat.annotations.Usage;
+import studio.mevera.imperat.annotations.*;
 import studio.mevera.synapse.HytaleSynapse;
 
+@Command("synapse")
 @Permission("synapse.admin")
 public class SynapseCommand {
 

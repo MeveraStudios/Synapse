@@ -2,13 +2,11 @@ package studio.mevera.synapse.command.impl;
 
 import org.bukkit.entity.Player;
 import studio.mevera.imperat.BukkitSource;
-import studio.mevera.imperat.annotations.Greedy;
-import studio.mevera.imperat.annotations.Permission;
-import studio.mevera.imperat.annotations.SubCommand;
-import studio.mevera.imperat.annotations.Usage;
+import studio.mevera.imperat.annotations.*;
 import studio.mevera.synapse.BukkitSynapse;
 import studio.mevera.synapse.util.SynapseHelpMessage;
 
+@Command("synapse")
 @Permission("synapse.admin")
 public class SynapseCommand {
 
