@@ -17,7 +17,7 @@ public final class HytalePlugin extends JavaPlugin {
     }
 
     @Override
-    public void start() {
+    public void setup() {
         getLogger().atInfo().log("\n" + Utilities.HYPHEN + "\n" + Utilities.ASCII_ART);
         instance = this;
         getEventRegistry().register(PlayerDisconnectEvent.class, event -> HytaleSynapse.get().onQuit(event));
