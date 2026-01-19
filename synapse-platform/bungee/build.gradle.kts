@@ -54,6 +54,7 @@ tasks.processResources {
 
 tasks.shadowJar {
     configurations.add(hiddenShadowed)
-    relocate("com.alessiodp.libby", "studio.mevera.synapse.shade.libby")
     archiveFileName.set("synapse-${project.name}-${project.version}.jar")
+    relocate("com.alessiodp.libby", "studio.mevera.synapse.shade.libby")
+    relocate("studio.mevera.imperat", "studio.mevera.synapse.shade.imperat")
 }

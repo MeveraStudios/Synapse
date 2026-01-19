@@ -34,4 +34,5 @@ tasks.processResources {
 
 tasks.shadowJar {
     archiveFileName.set("synapse-${project.name}-${project.version}.jar")
+    relocate("studio.mevera.imperat", "studio.mevera.synapse.shade.imperat")
 }
