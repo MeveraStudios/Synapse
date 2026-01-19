@@ -1,0 +1,37 @@
+package studio.mevera.synapse.command.impl;
+
+import org.bukkit.entity.Player;
+import studio.mevera.imperat.BukkitSource;
+import studio.mevera.imperat.annotations.Greedy;
+import studio.mevera.imperat.annotations.Permission;
+import studio.mevera.imperat.annotations.SubCommand;
+import studio.mevera.imperat.annotations.Usage;
+import studio.mevera.synapse.BukkitSynapse;
+import studio.mevera.synapse.util.SynapseHelpMessage;
+
+@Permission("synapse.admin")
+public class SynapseCommand {
+
+    @Usage
+    @SubCommand("help")
+    public void sendHelp(BukkitSource sender) {
+        sender.reply(SynapseHelpMessage.getHelpMessage());
+    }
+
+    @SubCommand("selfparse")
+    @Permission("synapse.admin.selfparse")
+    public void selfParse(BukkitSource sender, @Greedy String text) {
+        BukkitSynapse synapse = BukkitSynapse.get();
+        String parsed = synapse.translate(text, sender.origin());
+        sender.reply(parsed);
+    }
+
+    @SubCommand("parse")
+    @Permission("synapse.admin.parseother")
+    public void parse(BukkitSource sender, Player target, @Greedy String text) {
+        BukkitSynapse synapse = BukkitSynapse.get();
+        String parsed = synapse.translate(text, target);
+        sender.reply(parsed);
+    }
+
+}

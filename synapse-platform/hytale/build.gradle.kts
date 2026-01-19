@@ -8,8 +8,11 @@ repositories {
     maven(url = "https://repo.gravemc.net/releases/")
 }
 
+val imperatVersion: String by rootProject.extra
 dependencies {
     api(project(":synapse-core"))
+    implementation("studio.mevera:imperat-core:$imperatVersion")
+    implementation("studio.mevera:imperat-hytale:$imperatVersion")
     compileOnly("com.hypixel:hytale-server:1.0.0")
 }
 

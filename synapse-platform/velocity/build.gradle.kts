@@ -11,8 +11,11 @@ repositories {
     }
 }
 
+val imperatVersion: String by rootProject.extra
 dependencies {
     api(project(":synapse-platform:adventure"))
+    implementation("studio.mevera:imperat-core:$imperatVersion")
+    implementation("studio.mevera:imperat-velocity:$imperatVersion")
     compileOnly("com.velocitypowered:velocity-api:3.4.0-SNAPSHOT")
 }
 

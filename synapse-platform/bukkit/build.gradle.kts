@@ -31,9 +31,12 @@ configurations {
         extendsFrom(hiddenShadowed)
     }
 }
+
+val imperatVersion: String by rootProject.extra
 dependencies {
     api(project(":synapse-platform:adventure"))
-
+    implementation("studio.mevera:imperat-core:$imperatVersion")
+    implementation("studio.mevera:imperat-bukkit:$imperatVersion")
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("io.papermc.paper:paper-api:1.21.10-R0.1-SNAPSHOT")
 
@@ -55,6 +58,7 @@ tasks.processResources {
 
 tasks.shadowJar {
     configurations.add(hiddenShadowed)
-    relocate("com.alessiodp.libby", "studio.mevera.synapse.shade.libby")
     archiveFileName.set("synapse-${project.name}-${project.version}.jar")
+    relocate("com.alessiodp.libby", "studio.mevera.synapse.shade.libby")
+    relocate("studio.mevera.imperat", "studio.mevera.synapse.shade.imperat")
 }

@@ -74,7 +74,7 @@ Synapse is a high-performance, extensible placeholder translation framework that
 ---
 ### Installation
 
-#### For Bukkit/Bungee/Velocity Servers
+#### For Hytale/Bukkit/Bungee/Velocity Servers
 
 1. Download the latest `synapse-PLATFORM-*.*.jar` from [Releases](https://github.com/MeveraStudios/Synapse/releases)
 2. Place the JAR in your server's `plugins/` directory
@@ -161,6 +161,40 @@ Check out the [Documentation](https://docs.mevera.studio/Synapse/) for detailed 
 | **Fabric** | 📋 Planned | Q2 2026 |
 | **Forge**  | 📋 Planned | Q2 2026 |
 
+---
+## ⚙️ Commands & Permissions
+
+Synapse provides a set of administrative commands for testing and debugging placeholder translations.
+
+### Commands
+
+| Command                          | Description                                        | Permission                 |
+|----------------------------------|----------------------------------------------------|----------------------------|
+| `/synapse help`                  | Shows the help message with all available commands | `synapse.admin`            |
+| `/synapse selfparse <text>`      | Parses placeholders in text as yourself            | `synapse.admin.selfparse`  |
+| `/synapse parse <player> <text>` | Parses placeholders in text as another player      | `synapse.admin.parseother` |
+
+### Permission Nodes
+
+| Permission                 | Description                                        | Default |
+|----------------------------|----------------------------------------------------|---------|
+| `synapse.admin`            | Base permission for all Synapse commands           | `op`    |
+| `synapse.admin.selfparse`  | Permission to parse placeholders as yourself       | `op`    |
+| `synapse.admin.parseother` | Permission to parse placeholders as another player | `op`    |
+
+### Examples
+```bash
+# Parse placeholders as yourself
+/synapse selfparse Hello ${player.name}, you have ${player.level} levels!
+
+# Parse placeholders as another player
+/synapse parse Notch Your balance: ${player.balance}
+
+# View help
+/synapse help
+```
+
+> 💡 **Tip**: These commands are particularly useful for testing custom placeholders and debugging placeholder resolution issues.
 ---
 ## 🔧 Building
 

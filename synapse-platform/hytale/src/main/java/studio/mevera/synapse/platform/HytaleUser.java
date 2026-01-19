@@ -2,6 +2,7 @@ package studio.mevera.synapse.platform;
 
 import com.hypixel.hytale.server.core.command.system.CommandSender;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.Universe;
 import studio.mevera.synapse.error.impl.IgnoreException;
 import studio.mevera.synapse.error.impl.PlaceholderException;
@@ -52,6 +53,10 @@ public class HytaleUser extends UserBase {
 
     public Player asPlayer() {
         return (Player) this.sender;
+    }
+
+    public PlayerRef asPlayerRef() {
+        return Universe.get().getPlayer(this.uniqueId());
     }
 
     @Override

@@ -5,7 +5,7 @@ plugins {
 
 allprojects {
     group = "studio.mevera"
-    version = "1.3.0"
+    version = "1.4.0"
 
     val targetJavaVersion = 21
     tasks.withType<JavaCompile>().configureEach {
@@ -17,6 +17,8 @@ allprojects {
         targetCompatibility = javaVersion.toString()
     }
 }
+
+extra["imperatVersion"] = "2.4.0"
 
 subprojects {
     apply(plugin = "java")

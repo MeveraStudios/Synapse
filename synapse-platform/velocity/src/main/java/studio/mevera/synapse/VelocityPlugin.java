@@ -9,6 +9,7 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.proxy.ProxyServer;
 import org.slf4j.Logger;
+import studio.mevera.synapse.command.CommandManager;
 import studio.mevera.synapse.internal.VelocityInternalNeuron;
 import studio.mevera.synapse.util.Utilities;
 
@@ -35,6 +36,7 @@ public final class VelocityPlugin {
         instance = this;
         this.server.getEventManager().register(this, this);
         VelocitySynapse.get().registerNeuron(new VelocityInternalNeuron());
+        new CommandManager(this);
         logger.info("\n" + Utilities.HYPHEN);
     }
 

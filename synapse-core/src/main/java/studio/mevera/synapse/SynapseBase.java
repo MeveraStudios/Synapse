@@ -1,5 +1,6 @@
 package studio.mevera.synapse;
 
+import org.jetbrains.annotations.ApiStatus;
 import studio.mevera.synapse.context.type.RelationalContext;
 import studio.mevera.synapse.error.ResolveResult;
 import studio.mevera.synapse.error.ThrowableResolverRegistry;
@@ -125,6 +126,11 @@ public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implem
     @Override
     public void registerNeuron(final N neuron) {
         this.neuronRegistry.register(neuron);
+    }
+
+    @ApiStatus.Internal
+    public NeuronRegistry<U, N> getNeuronRegistry() {
+        return neuronRegistry;
     }
 
 }

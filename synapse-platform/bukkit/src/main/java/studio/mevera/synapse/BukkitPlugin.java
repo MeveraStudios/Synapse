@@ -1,5 +1,6 @@
 package studio.mevera.synapse;
 
+import studio.mevera.synapse.command.CommandManager;
 import studio.mevera.synapse.internal.BukkitInternalNeuron;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,6 +19,7 @@ public final class BukkitPlugin extends JavaPlugin implements Listener {
         instance = this;
         LibraryLoader.loadLibraries();
         BukkitSynapse.get().registerNeuron(new BukkitInternalNeuron());
+        new CommandManager(this);
         getServer().getPluginManager().registerEvents(this, this);
         getLogger().info("\n" + Utilities.HYPHEN);
     }
