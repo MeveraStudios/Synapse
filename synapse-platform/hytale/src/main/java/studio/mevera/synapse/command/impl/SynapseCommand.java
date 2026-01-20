@@ -9,6 +9,8 @@ import studio.mevera.imperat.HytaleSource;
 import studio.mevera.imperat.annotations.*;
 import studio.mevera.synapse.HytaleSynapse;
 
+import java.util.UUID;
+
 @Command("synapse")
 @Permission("synapse.admin")
 public class SynapseCommand {
@@ -33,7 +35,12 @@ public class SynapseCommand {
     @Permission("synapse.admin.parseother")
     public void parse(HytaleSource sender, PlayerRef target, @Greedy String text) {
         HytaleSynapse synapse = HytaleSynapse.get();
-        World world = Universe.get().getWorld(target.getUuid());
+        UUID worldID = target.getWorldUuid();
+        if (worldID == null) {
+            sender.reply("Could not find the target player's world's ID.");
+            return;
+        }
+        World world = Universe.get().getWorld(worldID);
         if (world == null) {
             sender.reply("Could not find the target player's world.");
             return;
