@@ -50,7 +50,8 @@ public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implem
             final Context<U> context = new BasicContext<>(user, tag, namespace, args);
 
             try {
-                final String replacement = neuron.onRequest(tag.substring(namespace.length() + 1), context);
+                final String key = dotIndex == -1 ? tag : tag.substring(namespace.length() + 1);
+                final String replacement = neuron.onRequest(key, context);
 
                 if (replacement != null) {
                     matcher.appendReplacement(result, Matcher.quoteReplacement(replacement));
@@ -98,7 +99,8 @@ public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implem
             final Context<U> context = new RelationalContext<>(user, other, tag, namespace, args);
 
             try {
-                final String replacement = neuron.onRequest(tag.substring(namespace.length() + 1), context);
+                final String key = dotIndex == -1 ? tag : tag.substring(namespace.length() + 1);
+                final String replacement = neuron.onRequest(key, context);
 
                 if (replacement != null) {
                     matcher.appendReplacement(result, Matcher.quoteReplacement(replacement));
