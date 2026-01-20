@@ -78,8 +78,11 @@ public abstract class NeuronBase<U extends User> implements Neuron<U> {
 
     @Override
     public void register(final Placeholder<U> placeholder, final String... aliases) {
-        this.placeholders.put(placeholder.name(), placeholder);
+        Objects.requireNonNull(placeholder, "Placeholder cannot be null");
+        Objects.requireNonNull(placeholder.name(), "Placeholder name cannot be null");
+        this.placeholders.put(placeholder.name().toLowerCase(), placeholder);
         for (final String alias : aliases) {
+            if (alias == null || alias.isEmpty()) continue;
             this.placeholders.put(alias.toLowerCase(), placeholder);
         }
     }
@@ -152,13 +155,15 @@ public abstract class NeuronBase<U extends User> implements Neuron<U> {
 
     @Override
     public boolean isRegistered(final String name) {
-        return this.placeholders.containsKey(name);
+        return name != null && this.placeholders.containsKey(name.toLowerCase());
     }
 
     @Override
     public void unregister(final String tag) {
-        final Placeholder<U> placeholder = this.placeholders.remove(tag);
-        this.placeholders.entrySet().removeIf(entry -> entry.getValue().equals(placeholder));
+        if (tag == null) return;
+        final Placeholder<U> placeholder = this.placeholders.remove(tag.toLowerCase());
+        if (placeholder == null) return;
+        this.placeholders.values().removeIf(p -> p == placeholder);
     }
 
     @Override

@@ -51,7 +51,7 @@ public final class RegexUtil {
             }
         }
 
-        return args.toArray(new String[0]);
+        return args.toArray(String[]::new);
     }
 
 }
