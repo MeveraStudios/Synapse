@@ -7,11 +7,15 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.PluginContainer;
+import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import org.slf4j.Logger;
 import studio.mevera.synapse.command.CommandManager;
 import studio.mevera.synapse.internal.VelocityInternalNeuron;
+import studio.mevera.synapse.log.Slf4jSynapseLogger;
 import studio.mevera.synapse.util.Utilities;
+
+import java.nio.file.Path;
 
 @Plugin(id = "synapse")
 public final class VelocityPlugin {
@@ -21,12 +25,19 @@ public final class VelocityPlugin {
     private final ProxyServer server;
     private final PluginContainer container;
     private final Logger logger;
+    private final Path directory;
 
     @Inject
-    public VelocityPlugin(final ProxyServer server, final Logger logger, final PluginContainer container) {
+    public VelocityPlugin(
+            final ProxyServer server,
+            final Logger logger,
+            final PluginContainer container,
+            @DataDirectory Path dataDirectory
+    ) {
         this.server = server;
         this.logger = logger;
         this.container = container;
+        this.directory = dataDirectory;
     }
 
     @Subscribe
@@ -35,7 +46,10 @@ public final class VelocityPlugin {
         logger.info(Utilities.ASCII_ART);
         instance = this;
         this.server.getEventManager().register(this, this);
-        VelocitySynapse.get().registerNeuron(new VelocityInternalNeuron());
+        VelocitySynapse synapse = VelocitySynapse.get();
+        synapse.setLogger(new Slf4jSynapseLogger(this.logger));
+        synapse.loadPluggedNeurons(this.directory.resolve("neurons"));
+        synapse.registerNeuron(new VelocityInternalNeuron());
         new CommandManager(this);
         logger.info("\n" + Utilities.HYPHEN);
     }

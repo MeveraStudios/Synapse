@@ -1,9 +1,12 @@
 package studio.mevera.synapse;
 
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import studio.mevera.synapse.context.type.RelationalContext;
 import studio.mevera.synapse.error.ResolveResult;
 import studio.mevera.synapse.error.ThrowableResolverRegistry;
+import studio.mevera.synapse.loader.NeuronLoader;
+import studio.mevera.synapse.log.SynapseLogger;
 import studio.mevera.synapse.manager.NeuronRegistry;
 import studio.mevera.synapse.context.type.BasicContext;
 import studio.mevera.synapse.context.Context;
@@ -11,6 +14,8 @@ import studio.mevera.synapse.platform.Neuron;
 import studio.mevera.synapse.platform.User;
 import studio.mevera.synapse.util.RegexUtil;
 
+import java.nio.file.Path;
+import java.util.Collection;
 import java.util.regex.Matcher;
 
 /**
@@ -26,6 +31,8 @@ public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implem
 
     protected final NeuronRegistry<U, N> neuronRegistry = new NeuronRegistry<>();
     protected final ThrowableResolverRegistry<U> throwableResolverRegistry = new ThrowableResolverRegistry<>();
+
+    protected SynapseLogger synapseLogger;
 
     @Override
     public String translate(final String text, final U user) {
@@ -133,6 +140,40 @@ public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implem
     @ApiStatus.Internal
     public NeuronRegistry<U, N> getNeuronRegistry() {
         return neuronRegistry;
+    }
+
+    @Override
+    public @NotNull SynapseLogger getLogger() {
+        if (synapseLogger == null) {
+            throw new IllegalStateException("Synapse Logger has not been initialized yet");
+        }
+        return synapseLogger;
+    }
+
+    protected void setLogger(final @NotNull SynapseLogger logger) {
+        synapseLogger = logger;
+    }
+
+    /**
+     * Loads and registers all neurons from a directory
+     */
+    @Override
+    public void loadPluggedNeurons(final Path directory) {
+        final NeuronLoader<U, N> loader = new NeuronLoader<>(this.getLogger());
+
+        try {
+            final Collection<NeuronLoader.LoadedNeuron<N>> neurons = loader.loadFromDirectory(directory);
+            for (NeuronLoader.LoadedNeuron<N> loaded : neurons) {
+                try {
+                    this.registerNeuron(loaded.neuron());
+                    this.getLogger().info("Loaded neuron: " + loaded.getName() + " v" + loaded.getVersion() + " by " + loaded.getAuthor());
+                } catch (Exception e) {
+                    this.getLogger().error("Failed to register neuron: " + loaded.getName(), e);
+                }
+            }
+        } catch (Exception e) {
+            getLogger().error("Failed to load neurons from directory: " + directory, e);
+        }
     }
 
 }

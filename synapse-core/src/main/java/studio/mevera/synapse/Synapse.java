@@ -1,8 +1,11 @@
 package studio.mevera.synapse;
 
+import org.jetbrains.annotations.NotNull;
+import studio.mevera.synapse.log.SynapseLogger;
 import studio.mevera.synapse.platform.Neuron;
 import studio.mevera.synapse.platform.User;
 
+import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
@@ -170,4 +173,19 @@ public interface Synapse<O, U extends User, N extends Neuron<U>> {
      */
     void registerNeuron(N neuron);
 
+    /**
+     * Retrieves the Synapse logger for logging purposes.
+     *
+     * @return The SynapseLogger instance.
+     */
+    @NotNull
+    SynapseLogger getLogger();
+
+    /**
+     * Loads neurons from the specified directory.
+     * Neurons are expected to be annotated with ``@NeuronEntry`` and packaged in JAR files.
+     *
+     * @param directory The path to the directory containing neuron files.
+     */
+    void loadPluggedNeurons(Path directory);
 }

@@ -6,6 +6,7 @@ import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import org.jetbrains.annotations.NotNull;
 import studio.mevera.synapse.command.CommandManager;
 import studio.mevera.synapse.internal.HytaleInternalNeuron;
+import studio.mevera.synapse.log.HytaleSynapseLogger;
 import studio.mevera.synapse.util.Utilities;
 
 public final class HytalePlugin extends JavaPlugin {
@@ -21,7 +22,10 @@ public final class HytalePlugin extends JavaPlugin {
         getLogger().atInfo().log("\n" + Utilities.HYPHEN + "\n" + Utilities.ASCII_ART);
         instance = this;
         getEventRegistry().register(PlayerDisconnectEvent.class, event -> HytaleSynapse.get().onQuit(event));
-        HytaleSynapse.get().registerNeuron(new HytaleInternalNeuron());
+        HytaleSynapse synapse = HytaleSynapse.get();
+        synapse.setLogger(new HytaleSynapseLogger(this.getLogger()));
+        synapse.loadPluggedNeurons(this.getDataDirectory().resolve("neurons"));
+        synapse.registerNeuron(new HytaleInternalNeuron());
         new CommandManager(this);
         getLogger().atInfo().log("\n" + Utilities.HYPHEN);
     }
