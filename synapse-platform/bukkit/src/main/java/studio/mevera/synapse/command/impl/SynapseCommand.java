@@ -18,7 +18,7 @@ public class SynapseCommand {
 
     @SubCommand("selfparse")
     @Permission("synapse.admin.selfparse")
-    public void selfParse(BukkitSource sender, @Greedy String text) {
+    public void selfParse(BukkitSource sender, @Named("message") @Greedy String text) {
         BukkitSynapse synapse = BukkitSynapse.get();
         String parsed = synapse.translate(text, sender.origin());
         sender.reply(parsed);
@@ -26,7 +26,7 @@ public class SynapseCommand {
 
     @SubCommand("parse")
     @Permission("synapse.admin.parseother")
-    public void parse(BukkitSource sender, Player target, @Greedy String text) {
+    public void parse(BukkitSource sender, @Named("target") Player target, @Named("message") @Greedy String text) {
         BukkitSynapse synapse = BukkitSynapse.get();
         String parsed = synapse.translate(text, target);
         sender.reply(parsed);

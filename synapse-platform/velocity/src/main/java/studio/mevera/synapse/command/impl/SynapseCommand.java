@@ -18,7 +18,7 @@ public class SynapseCommand {
 
     @SubCommand("selfparse")
     @Permission("synapse.admin.selfparse")
-    public void selfParse(VelocitySource sender, @Greedy String text) {
+    public void selfParse(VelocitySource sender, @Named("message") @Greedy String text) {
         VelocitySynapse synapse = VelocitySynapse.get();
         String parsed = synapse.translate(text, sender.origin());
         sender.reply(parsed);
@@ -26,7 +26,7 @@ public class SynapseCommand {
 
     @SubCommand("parse")
     @Permission("synapse.admin.parseother")
-    public void parse(VelocitySource sender, Player target, @Greedy String text) {
+    public void parse(VelocitySource sender, @Named("target") Player target, @Named("message") @Greedy String text) {
         VelocitySynapse synapse = VelocitySynapse.get();
         String parsed = synapse.translate(text, target);
         sender.reply(parsed);

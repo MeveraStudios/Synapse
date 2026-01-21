@@ -18,7 +18,7 @@ public class SynapseCommand {
 
     @SubCommand("selfparse")
     @Permission("synapse.admin.selfparse")
-    public void selfParse(BungeeSource sender, @Greedy String text) {
+    public void selfParse(BungeeSource sender, @Named("message") @Greedy String text) {
         BungeeSynapse synapse = BungeeSynapse.get();
         String parsed = synapse.translate(text, sender.origin());
         sender.reply(parsed);
@@ -26,7 +26,7 @@ public class SynapseCommand {
 
     @SubCommand("parse")
     @Permission("synapse.admin.parseother")
-    public void parse(BungeeSource sender, ProxiedPlayer target, @Greedy String text) {
+    public void parse(BungeeSource sender, @Named("target") ProxiedPlayer target, @Named("message") @Greedy String text) {
         BungeeSynapse synapse = BungeeSynapse.get();
         String parsed = synapse.translate(text, target);
         sender.reply(parsed);

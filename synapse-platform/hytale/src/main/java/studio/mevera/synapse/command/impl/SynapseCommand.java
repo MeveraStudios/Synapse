@@ -25,7 +25,7 @@ public class SynapseCommand {
 
     @SubCommand("selfparse")
     @Permission("synapse.admin.selfparse")
-    public void selfParse(HytaleSource sender, @Greedy String text) {
+    public void selfParse(HytaleSource sender, @Named("message") @Greedy String text) {
         HytaleSynapse synapse = HytaleSynapse.get();
         String parsed = synapse.translate(text, sender.origin());
         sender.reply(parsed);
@@ -33,7 +33,7 @@ public class SynapseCommand {
 
     @SubCommand("parse")
     @Permission("synapse.admin.parseother")
-    public void parse(HytaleSource sender, PlayerRef target, @Greedy String text) {
+    public void parse(HytaleSource sender, @Named("target") PlayerRef target, @Named("message") @Greedy String text) {
         HytaleSynapse synapse = HytaleSynapse.get();
         UUID worldID = target.getWorldUuid();
         if (worldID == null) {
