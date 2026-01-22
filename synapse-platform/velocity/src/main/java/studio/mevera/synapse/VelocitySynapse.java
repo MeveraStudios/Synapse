@@ -20,7 +20,10 @@ public final class VelocitySynapse extends AdventureSynapseBase<CommandSource, V
 
     private final Map<CommandSource, VelocityUser> userCache = new ConcurrentHashMap<>();
 
-    private VelocitySynapse() {}
+    private VelocitySynapse() {
+        // register default dependencies
+        this.dependencyRegistry.register(VelocitySynapse.class, this);
+    }
 
     @Override
     public VelocityUser asUser(final CommandSource origin) {

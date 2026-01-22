@@ -19,7 +19,11 @@ public final class BukkitSynapse extends AdventureSynapseBase<CommandSender, Buk
     }
 
     private final Map<CommandSender, BukkitUser> userCache = new ConcurrentHashMap<>();
-    private BukkitSynapse() {}
+
+    private BukkitSynapse() {
+        // register default dependencies
+        this.dependencyRegistry.register(BukkitSynapse.class, this);
+    }
 
     @Override
     public BukkitUser asUser(final CommandSender origin) {

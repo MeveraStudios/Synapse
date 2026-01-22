@@ -19,7 +19,11 @@ public final class HytaleSynapse extends SynapseBase<CommandSender, HytaleUser, 
     }
 
     private final Map<UUID, HytaleUser> userCache = new ConcurrentHashMap<>();
-    private HytaleSynapse() {}
+
+    private HytaleSynapse() {
+        // register default dependencies
+        this.dependencyRegistry.register(HytaleSynapse.class, this);
+    }
 
     @Override
     public HytaleUser asUser(final CommandSender origin) {

@@ -1,11 +1,12 @@
 package studio.mevera.synapse.loader;
 
+import studio.mevera.synapse.SynapseBase;
 import studio.mevera.synapse.annotation.NeuronEntry;
-import studio.mevera.synapse.log.SynapseLogger;
 import studio.mevera.synapse.platform.Neuron;
 import studio.mevera.synapse.platform.User;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
@@ -15,17 +16,17 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Stream;
 
-public class NeuronLoader<U extends User, N extends Neuron<U>> {
+public class NeuronLoader<O, U extends User, N extends Neuron<U>> {
 
-    private final SynapseLogger logger;
+    private final SynapseBase<O, U, N> synapse;
     private final ClassLoader parentClassLoader;
 
-    public NeuronLoader(SynapseLogger logger) {
-        this(logger, NeuronLoader.class.getClassLoader());
+    public NeuronLoader(SynapseBase<O, U, N> synapse) {
+        this(synapse, NeuronLoader.class.getClassLoader());
     }
 
-    public NeuronLoader(SynapseLogger logger, ClassLoader parentClassLoader) {
-        this.logger = logger;
+    public NeuronLoader(SynapseBase<O, U, N> synapse, ClassLoader parentClassLoader) {
+        this.synapse = synapse;
         this.parentClassLoader = parentClassLoader;
     }
 
@@ -38,37 +39,37 @@ public class NeuronLoader<U extends User, N extends Neuron<U>> {
      */
     public Collection<LoadedNeuron<N>> loadFromDirectory(Path directory) throws IOException {
         if (!Files.exists(directory) || directory.getNameCount() == 0) {
-            logger.warn("Neuron directory doesn't exist (or invalid path). Creating it: " + directory);
+            this.synapse.getLogger().warn("Neuron directory doesn't exist (or invalid path). Creating it: " + directory);
             Files.createDirectories(directory);
             return Collections.emptyList();
         }
 
-        logger.info("Scanning neuron directory: " + directory);
+        this.synapse.getLogger().info("Scanning neuron directory: " + directory);
 
         final List<LoadedNeuron<N>> neurons = new ArrayList<>();
 
-        try (Stream<Path> paths = Files.walk(directory, 1)) {
+        try (final Stream<Path> paths = Files.walk(directory, 1)) {
             paths.filter(p -> p.toString().endsWith(".jar"))
                     .forEach(jarPath -> {
-                        logger.debug("Found neuron jar: " + jarPath.getFileName());
+                        this.synapse.getLogger().debug("Found neuron jar: " + jarPath.getFileName());
 
                         try {
                             List<LoadedNeuron<N>> loaded = loadNeuronsFromJar(jarPath);
                             neurons.addAll(loaded);
 
                             if (!loaded.isEmpty()) {
-                                logger.info("Found " + loaded.size() + " neuron(s) from: " + jarPath.getFileName());
+                                this.synapse.getLogger().info("Found " + loaded.size() + " neuron(s) from: " + jarPath.getFileName());
                             } else {
-                                logger.debug("No neurons found inside: " + jarPath.getFileName());
+                                this.synapse.getLogger().debug("No neurons found inside: " + jarPath.getFileName());
                             }
 
                         } catch (Exception e) {
-                            logger.error("Failed to read neurons from jar: " + jarPath, e);
+                            this.synapse.getLogger().error("Failed to read neurons from jar: " + jarPath, e);
                         }
                     });
         }
 
-        logger.info("Neuron scan complete. Total loaded neurons: " + neurons.size());
+        this.synapse.getLogger().info("Neuron scan complete. Total loaded neurons: " + neurons.size());
         return neurons;
     }
 
@@ -115,30 +116,72 @@ public class NeuronLoader<U extends User, N extends Neuron<U>> {
 
                     // It has @NeuronEntry, but doesn't implement Neuron -> warn and skip
                     if (!Neuron.class.isAssignableFrom(clazz)) {
-                        logger.warn("Class " + className + " has @NeuronEntry but doesn't implement Neuron (Skipping)");
+                        this.synapse.getLogger().warn("Class " + className + " has @NeuronEntry but doesn't implement Neuron (Skipping)");
                         continue;
                     }
 
                     NeuronEntry annotation = clazz.getAnnotation(NeuronEntry.class);
 
                     // Instantiate neuron
-                    @SuppressWarnings("unchecked")
-                    N neuron = (N) clazz.getDeclaredConstructor().newInstance();
+                    N neuron = this.instantiateNeuron(clazz, className);
                     neurons.add(new LoadedNeuron<>(neuron, annotation, classLoader, jarPath));
                 } catch (ClassNotFoundException | NoClassDefFoundError e) {
                     // Usually means missing dependency inside the jar
-                    logger.debug("Skipping class due to missing dependency: " + className, e);
+                    this.synapse.getLogger().debug("Skipping class due to missing dependency: " + className, e);
 
                 } catch (Exception e) {
-                    logger.error("Failed to instantiate neuron class: " + className, e);
+                    this.synapse.getLogger().error("Failed to instantiate neuron class: " + className, e);
                 }
             }
         } catch (IOException e) {
-            logger.error("Failed to open jar: " + jarPath, e);
+            this.synapse.getLogger().error("Failed to open jar: " + jarPath, e);
             throw e;
         }
 
         return neurons;
+    }
+
+    /**
+     * Attempts to instantiate a neuron class using registered dependencies.
+     *
+     * @param clazz     the neuron class to instantiate
+     * @param className the class name (for logging)
+     * @return the instantiated neuron, or null if instantiation failed
+     * @throws Exception if instantiation fails unexpectedly
+     */
+    @SuppressWarnings("unchecked")
+    private N instantiateNeuron(Class<?> clazz, String className) throws Exception {
+        Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+
+        Arrays.sort(constructors, (a, b) -> Integer.compare(b.getParameterCount(), a.getParameterCount()));
+
+        for (Constructor<?> constructor : constructors) {
+            Class<?>[] paramTypes = constructor.getParameterTypes();
+            Object[] args = new Object[paramTypes.length];
+
+            boolean canInstantiate = true;
+
+            for (int i = 0; i < paramTypes.length; i++) {
+                Optional<?> dependency = this.synapse.getDependencyRegistry().get(paramTypes[i]);
+
+                if (dependency.isPresent()) {
+                    args[i] = dependency.get();
+                } else {
+                    canInstantiate = false;
+                    break;
+                }
+            }
+
+            if (canInstantiate) {
+                constructor.setAccessible(true);
+                this.synapse.getLogger().debug("Instantiating " + className + " with " + paramTypes.length + " dependencies");
+                return (N) constructor.newInstance(args);
+            }
+        }
+
+        this.synapse.getLogger().error("No suitable constructor found for " + className +
+                ". Required dependencies not registered.");
+        return null;
     }
 
     /**

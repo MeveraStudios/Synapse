@@ -20,7 +20,10 @@ public final class BungeeSynapse extends AdventureSynapseBase<CommandSender, Bun
 
     private final Map<CommandSender, BungeeUser> userCache = new ConcurrentHashMap<>();
 
-    private BungeeSynapse() {}
+    private BungeeSynapse() {
+        // register default dependencies
+        this.dependencyRegistry.register(BungeeSynapse.class, this);
+    }
 
     @Override
     public BungeeUser asUser(final CommandSender origin) {

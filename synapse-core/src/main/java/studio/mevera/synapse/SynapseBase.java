@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import studio.mevera.synapse.context.type.RelationalContext;
 import studio.mevera.synapse.error.ResolveResult;
 import studio.mevera.synapse.error.ThrowableResolverRegistry;
+import studio.mevera.synapse.loader.DependencyRegistry;
 import studio.mevera.synapse.loader.NeuronLoader;
 import studio.mevera.synapse.log.SynapseLogger;
 import studio.mevera.synapse.manager.NeuronRegistry;
@@ -30,6 +31,8 @@ import java.util.regex.Matcher;
 public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implements Synapse<O, U, N> {
 
     protected final NeuronRegistry<U, N> neuronRegistry = new NeuronRegistry<>();
+    protected final NeuronLoader<O, U, N> loader = new NeuronLoader<>(this);
+    protected final DependencyRegistry dependencyRegistry = new DependencyRegistry();
     protected final ThrowableResolverRegistry<U> throwableResolverRegistry = new ThrowableResolverRegistry<>();
 
     protected SynapseLogger synapseLogger;
@@ -137,11 +140,6 @@ public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implem
         this.neuronRegistry.register(neuron);
     }
 
-    @ApiStatus.Internal
-    public NeuronRegistry<U, N> getNeuronRegistry() {
-        return neuronRegistry;
-    }
-
     @Override
     public @NotNull SynapseLogger getLogger() {
         if (synapseLogger == null) {
@@ -159,8 +157,6 @@ public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implem
      */
     @Override
     public void loadPluggedNeurons(final Path directory) {
-        final NeuronLoader<U, N> loader = new NeuronLoader<>(this.getLogger());
-
         try {
             final Collection<NeuronLoader.LoadedNeuron<N>> neurons = loader.loadFromDirectory(directory);
             for (NeuronLoader.LoadedNeuron<N> loaded : neurons) {
@@ -174,6 +170,16 @@ public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implem
         } catch (Exception e) {
             getLogger().error("Failed to load neurons from directory: " + directory, e);
         }
+    }
+
+    @ApiStatus.Internal
+    public NeuronRegistry<U, N> getNeuronRegistry() {
+        return neuronRegistry;
+    }
+
+    @ApiStatus.Internal
+    public DependencyRegistry getDependencyRegistry() {
+        return dependencyRegistry;
     }
 
 }
