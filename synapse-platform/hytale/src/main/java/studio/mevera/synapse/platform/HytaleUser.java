@@ -56,6 +56,9 @@ public class HytaleUser extends UserBase {
     }
 
     public PlayerRef asPlayerRef() {
+        if (!this.isPlayer()) {
+            throw new IgnoreException();
+        }
         return Universe.get().getPlayer(this.uniqueId());
     }
 
