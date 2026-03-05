@@ -5,15 +5,16 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven(url = "https://repo.gravemc.net/releases/")
+    maven(url = "https://maven.hytale.com/release/")
 }
 
+val hytaleVersion = "2026.02.19-1a311a592"
 val imperatVersion: String by rootProject.extra
 dependencies {
     api(project(":synapse-core"))
+    compileOnly("com.hypixel.hytale:Server:${hytaleVersion}")
     implementation("studio.mevera:imperat-core:$imperatVersion")
     implementation("studio.mevera:imperat-hytale:$imperatVersion")
-    compileOnly("com.hypixel:hytale-server:1.0.0")
 }
 
 tasks.processResources {
