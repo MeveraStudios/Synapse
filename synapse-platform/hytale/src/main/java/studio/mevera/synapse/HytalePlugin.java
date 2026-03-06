@@ -24,7 +24,8 @@ public final class HytalePlugin extends JavaPlugin {
         getEventRegistry().register(PlayerDisconnectEvent.class, event -> HytaleSynapse.get().onQuit(event));
         HytaleSynapse synapse = HytaleSynapse.get();
         synapse.setLogger(new HytaleSynapseLogger(this.getLogger()));
-        synapse.loadPluggedNeurons(this.getDataDirectory().resolve("neurons"));
+        int loaded = synapse.loadPluggedNeurons(this.getDataDirectory().resolve("neurons"));
+        getLogger().atInfo().log("Loaded " + loaded + " neurons.");
         synapse.registerNeuron(new HytaleInternalNeuron());
         new CommandManager(this);
         getLogger().atInfo().log("\n" + Utilities.HYPHEN);

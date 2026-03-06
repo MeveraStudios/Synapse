@@ -21,7 +21,8 @@ public final class BukkitPlugin extends JavaPlugin implements Listener {
         LibraryLoader.loadLibraries();
         BukkitSynapse synapse = BukkitSynapse.get();
         synapse.setLogger(new JavaSynapseLogger(getLogger()));
-        synapse.loadPluggedNeurons(this.getDataFolder().toPath().resolve("neurons"));
+        int loaded = synapse.loadPluggedNeurons(this.getDataFolder().toPath().resolve("neurons"));
+        getLogger().info("Loaded " + loaded + " neurons.");
         synapse.registerNeuron(new BukkitInternalNeuron());
         new CommandManager(this);
         getServer().getPluginManager().registerEvents(this, this);

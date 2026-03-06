@@ -52,7 +52,8 @@ public final class VelocityPlugin {
         this.server.getEventManager().register(this, this);
         VelocitySynapse synapse = VelocitySynapse.get();
         synapse.setLogger(new Slf4jSynapseLogger(this.logger));
-        synapse.loadPluggedNeurons(this.directory.resolve("neurons"));
+        int loaded = synapse.loadPluggedNeurons(this.directory.resolve("neurons"));
+        logger.info("Loaded {} neurons.", loaded);
         synapse.registerNeuron(new VelocityInternalNeuron());
         new CommandManager(this);
         logger.info("\n" + Utilities.HYPHEN);

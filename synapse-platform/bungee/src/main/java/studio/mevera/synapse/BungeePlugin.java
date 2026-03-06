@@ -22,7 +22,8 @@ public final class BungeePlugin extends Plugin implements Listener {
         getProxy().getPluginManager().registerListener(this, this);
         BungeeSynapse synapse = BungeeSynapse.get();
         synapse.setLogger(new JavaSynapseLogger(getLogger()));
-        synapse.loadPluggedNeurons(this.getDataFolder().toPath().resolve("neurons"));
+        int loaded = synapse.loadPluggedNeurons(this.getDataFolder().toPath().resolve("neurons"));
+        getLogger().info("Loaded " + loaded + " neurons.");
         synapse.registerNeuron(new BungeeInternalNeuron());
         new CommandManager(this);
         getLogger().info("\n" + Utilities.HYPHEN);
