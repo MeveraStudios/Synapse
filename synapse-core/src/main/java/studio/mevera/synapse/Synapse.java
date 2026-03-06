@@ -191,9 +191,43 @@ public interface Synapse<O, U extends User, N extends Neuron<U>> {
 
     /**
      * Loads neurons from the specified directory.
-     * Neurons are expected to be annotated with ``@NeuronEntry`` and packaged in JAR files.
      *
      * @param directory The path to the directory containing neuron files.
      */
-    void loadPluggedNeurons(Path directory);
+    int loadPluggedNeurons(Path directory);
+
+    /**
+     * Unload all externally loaded neurons.
+     *
+     * @param deleteJars whether to delete their jars
+     * @return number of neurons unloaded
+     */
+    int unloadAllPluggedNeurons(boolean deleteJars);
+
+    /**
+     * Convenience overload: unload without deleting jars.
+     */
+    default int unloadAllPluggedNeurons() {
+        return unloadAllPluggedNeurons(false);
+    }
+
+    /**
+     * Unloads a neuron by namespace.
+     *
+     * @param namespace namespace (or alias) of the neuron to unload
+     * @return true if a neuron was removed
+     */
+    default boolean unloadNeuron(String namespace) {
+        return unloadNeuron(namespace, false);
+    }
+
+    /**
+     * Unloads a neuron by namespace.
+     *
+     * @param namespace namespace (or alias) of the neuron to unload
+     * @param deleteJar whether to delete the underlying jar if external
+     * @return true if a neuron was removed
+     */
+    boolean unloadNeuron(String namespace, boolean deleteJar);
+
 }

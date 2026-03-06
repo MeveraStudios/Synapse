@@ -137,7 +137,7 @@ public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implem
 
     @Override
     public void registerNeuron(final N neuron) {
-        this.neuronRegistry.register(neuron);
+        this.neuronRegistry.registerInternal(neuron);
     }
 
     @Override
@@ -156,13 +156,15 @@ public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implem
      * Loads and registers all neurons from a directory
      */
     @Override
-    public void loadPluggedNeurons(final Path directory) {
+    public int loadPluggedNeurons(final Path directory) {
+        int count = 0;
         try {
             final Collection<NeuronLoader.LoadedNeuron<N>> neurons = loader.loadFromDirectory(directory);
             for (NeuronLoader.LoadedNeuron<N> loaded : neurons) {
                 try {
-                    this.registerNeuron(loaded.neuron());
+                    this.neuronRegistry.registerExternal(loaded.neuron(), loaded.classLoader(), loaded.jarPath());
                     this.getLogger().info("Loaded neuron: " + loaded.name() + " v" + loaded.version() + " by " + loaded.author());
+                    count++;
                 } catch (Exception e) {
                     this.getLogger().error("Failed to register neuron: " + loaded.name(), e);
                 }
@@ -170,6 +172,28 @@ public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implem
         } catch (Exception e) {
             getLogger().error("Failed to load neurons from directory: " + directory, e);
         }
+        return count;
+    }
+
+    @Override
+    public int unloadAllPluggedNeurons(final boolean deleteJars) {
+        int count = 0;
+        for (var reg : new java.util.ArrayList<>(this.neuronRegistry.getRegistrations())) {
+            if (!reg.internal()) {
+                for (String ns : reg.neuron().namespace().getNames()) {
+                    if (this.neuronRegistry.unregister(ns, deleteJars)) {
+                        count++;
+                        break;
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
+    @Override
+    public boolean unloadNeuron(final String namespace, final boolean deleteJar) {
+        return this.neuronRegistry.unregister(namespace, deleteJar);
     }
 
     @ApiStatus.Internal

@@ -1,7 +1,5 @@
 package studio.mevera.synapse.platform;
 
-import org.jetbrains.annotations.ApiStatus;
-import studio.mevera.synapse.annotation.NeuronEntry;
 import studio.mevera.synapse.context.Context;
 import studio.mevera.synapse.context.type.RelationalContext;
 import studio.mevera.synapse.placeholder.Placeholder;
@@ -29,7 +27,6 @@ public abstract class NeuronBase<U extends User> implements Neuron<U> {
     protected final Namespace namespace;
     protected final Map<String, Placeholder<U>> placeholders = new HashMap<>();
     protected final TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry();
-    protected final boolean internallyLoaded = this.getClass().isAnnotationPresent(NeuronEntry.class);
 
     public NeuronBase(final Namespace namespace) {
         Objects.requireNonNull(namespace, "Namespace cannot be null");
@@ -187,10 +184,5 @@ public abstract class NeuronBase<U extends User> implements Neuron<U> {
     @Override
     public void unregisterTypeHandler(final Type type) {
         this.typeHandlerRegistry.unregister(type);
-    }
-
-    @ApiStatus.Internal
-    public boolean isInternallyLoaded() {
-        return internallyLoaded;
     }
 }
