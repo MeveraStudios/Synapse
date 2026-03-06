@@ -1,11 +1,15 @@
 package studio.mevera.synapse.loader;
 
 import studio.mevera.synapse.SynapseBase;
-import studio.mevera.synapse.annotation.NeuronEntry;
 import studio.mevera.synapse.platform.Neuron;
 import studio.mevera.synapse.platform.User;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -20,6 +24,7 @@ public class NeuronLoader<O, U extends User, N extends Neuron<U>> {
 
     private final SynapseBase<O, U, N> synapse;
     private final ClassLoader parentClassLoader;
+    private final Gson gson = new GsonBuilder().create();
 
     public NeuronLoader(SynapseBase<O, U, N> synapse) {
         this(synapse, NeuronLoader.class.getClassLoader());
@@ -91,47 +96,12 @@ public class NeuronLoader<O, U extends User, N extends Neuron<U>> {
         List<LoadedNeuron<N>> neurons = new ArrayList<>();
 
         try (JarFile jar = new JarFile(jarPath.toFile())) {
-            Enumeration<JarEntry> entries = jar.entries();
+            Optional<NeuronManifest> manifestOptional = readManifest(jarPath.getFileName().toString(), jar);
 
-            while (entries.hasMoreElements()) {
-                JarEntry entry = entries.nextElement();
-                String name = entry.getName();
-
-                // Only process .class files
-                if (!name.endsWith(".class")) {
-                    continue;
-                }
-
-                // Convert path to class name
-                String className = name.replace('/', '.')
-                        .substring(0, name.length() - 6);
-
-                try {
-                    Class<?> clazz = classLoader.loadClass(className);
-
-                    // Only load classes marked as neurons
-                    if (!clazz.isAnnotationPresent(NeuronEntry.class)) {
-                        continue;
-                    }
-
-                    // It has @NeuronEntry, but doesn't implement Neuron -> warn and skip
-                    if (!Neuron.class.isAssignableFrom(clazz)) {
-                        this.synapse.getLogger().warn("Class " + className + " has @NeuronEntry but doesn't implement Neuron (Skipping)");
-                        continue;
-                    }
-
-                    NeuronEntry annotation = clazz.getAnnotation(NeuronEntry.class);
-
-                    // Instantiate neuron
-                    N neuron = this.instantiateNeuron(clazz, className);
-                    neurons.add(new LoadedNeuron<>(neuron, annotation, classLoader, jarPath));
-                } catch (ClassNotFoundException | NoClassDefFoundError e) {
-                    // Usually means missing dependency inside the jar
-                    this.synapse.getLogger().debug("Skipping class due to missing dependency: " + className, e);
-
-                } catch (Exception e) {
-                    this.synapse.getLogger().error("Failed to instantiate neuron class: " + className, e);
-                }
+            if (manifestOptional.isPresent()) {
+                loadFromManifest(jarPath, classLoader, neurons, manifestOptional.get());
+            } else {
+                this.synapse.getLogger().info("Skipping jar " + jarPath.getFileName() + " (no neuron manifest found)");
             }
         } catch (IOException e) {
             this.synapse.getLogger().error("Failed to open jar: " + jarPath, e);
@@ -139,6 +109,89 @@ public class NeuronLoader<O, U extends User, N extends Neuron<U>> {
         }
 
         return neurons;
+    }
+
+    /**
+     * Attempts to find & read a neuron manifest from the given jar file.
+     *
+     * @param jarName the name of the jar (for logging)
+     * @param jar     the JarFile to read from
+     * @return an Optional containing the NeuronManifest if found and parsed successfully, or empty if not found or failed
+     */
+    private Optional<NeuronManifest> readManifest(String jarName, JarFile jar) {
+        final List<String> candidates = List.of("neuron.json", "manifest.json", "synapse-neuron.json");
+        for (String candidate : candidates) {
+            JarEntry entry = jar.getJarEntry(candidate);
+            if (entry == null) {
+                continue;
+            }
+            try (InputStream is = jar.getInputStream(entry); InputStreamReader reader = new InputStreamReader(is)) {
+                NeuronManifest manifest = gson.fromJson(reader, NeuronManifest.class);
+                if (manifest != null) {
+                    return Optional.of(manifest.normalize());
+                }
+            } catch (Exception ignored) {
+                this.synapse.getLogger().warn("Failed to parse neuron manifest (" + candidate + ") in " + jarName);
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Loads a neuron from the given manifest and adds it to the list of loaded neurons.
+     *
+     * @param jarPath    the path to the jar file (for logging)
+     * @param classLoader the class loader to use for loading the neuron class
+     * @param neurons    the list to add the loaded neuron to
+     * @param manifest   the manifest containing neuron metadata and main class info
+     */
+    private void loadFromManifest(
+            Path jarPath,
+            URLClassLoader classLoader,
+            List<LoadedNeuron<N>> neurons,
+            NeuronManifest manifest
+    ) {
+        String platformName = synapse.platform().name().toLowerCase(Locale.ROOT);
+        NeuronManifest.PlatformEntry platformEntry = manifest.platforms().get(platformName);
+
+        if (platformEntry == null) {
+            this.synapse.getLogger().info("Skipping jar " + jarPath.getFileName() + " because manifest has no entry for platform: " + platformName);
+            return;
+        }
+
+        String mainClassName = platformEntry.main();
+        if (mainClassName == null || mainClassName.isBlank()) {
+            this.synapse.getLogger().warn("Manifest in " + jarPath.getFileName() + " lacks main class for platform " + platformName);
+            return;
+        }
+
+        try {
+            Class<?> clazz = classLoader.loadClass(mainClassName);
+            if (!Neuron.class.isAssignableFrom(clazz)) {
+                this.synapse.getLogger().warn("Main class " + mainClassName + " does not implement Neuron. Skipping jar " + jarPath.getFileName());
+                return;
+            }
+
+            N neuron = this.instantiateNeuron(clazz, mainClassName);
+            if (neuron == null) {
+                this.synapse.getLogger().error("Failed to instantiate neuron main class " + mainClassName + " for jar " + jarPath.getFileName());
+                return;
+            }
+
+            neurons.add(new LoadedNeuron<>(
+                    neuron,
+                    manifest.name(),
+                    manifest.version(),
+                    String.join(", ", manifest.authors()),
+                    manifest.description(),
+                    classLoader,
+                    jarPath
+            ));
+        } catch (ClassNotFoundException | NoClassDefFoundError e) {
+            this.synapse.getLogger().error("Main class " + mainClassName + " not found in jar " + jarPath.getFileName(), e);
+        } catch (Exception e) {
+            this.synapse.getLogger().error("Failed to load neuron from manifest in jar " + jarPath.getFileName(), e);
+        }
     }
 
     /**
@@ -189,25 +242,12 @@ public class NeuronLoader<O, U extends User, N extends Neuron<U>> {
      */
     public record LoadedNeuron<N extends Neuron<?>>(
             N neuron,
-            NeuronEntry annotation,
+            String name,
+            String version,
+            String author,
+            String description,
             ClassLoader classLoader,
             Path jarPath
-    ) {
-        public String getName() {
-            return annotation.name();
-        }
-
-        public String getVersion() {
-            return annotation.version();
-        }
-
-        public String getAuthor() {
-            return annotation.author();
-        }
-
-        public String getDescription() {
-            return annotation.description();
-        }
-    }
+    ) {}
 
 }

@@ -162,9 +162,9 @@ public abstract class SynapseBase<O, U extends User, N extends Neuron<U>> implem
             for (NeuronLoader.LoadedNeuron<N> loaded : neurons) {
                 try {
                     this.registerNeuron(loaded.neuron());
-                    this.getLogger().info("Loaded neuron: " + loaded.getName() + " v" + loaded.getVersion() + " by " + loaded.getAuthor());
+                    this.getLogger().info("Loaded neuron: " + loaded.name() + " v" + loaded.version() + " by " + loaded.author());
                 } catch (Exception e) {
-                    this.getLogger().error("Failed to register neuron: " + loaded.getName(), e);
+                    this.getLogger().error("Failed to register neuron: " + loaded.name(), e);
                 }
             }
         } catch (Exception e) {
