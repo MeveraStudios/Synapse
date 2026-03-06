@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import studio.mevera.synapse.command.CommandManager;
 import studio.mevera.synapse.internal.VelocityInternalNeuron;
 import studio.mevera.synapse.log.Slf4jSynapseLogger;
+import studio.mevera.synapse.platform.Platform;
+import studio.mevera.synapse.platform.PlatformInfo;
 import studio.mevera.synapse.util.Utilities;
 
 import java.nio.file.Path;
@@ -26,6 +28,7 @@ public final class VelocityPlugin {
     private final PluginContainer container;
     private final Logger logger;
     private final Path directory;
+    private final Platform platform;
 
     @Inject
     public VelocityPlugin(
@@ -38,6 +41,7 @@ public final class VelocityPlugin {
         this.logger = logger;
         this.container = container;
         this.directory = dataDirectory;
+        this.platform = new PlatformInfo("velocity", server.getVersion().getVersion());
     }
 
     @Subscribe
@@ -76,4 +80,7 @@ public final class VelocityPlugin {
         return container;
     }
 
+    public Platform getPlatform() {
+        return platform;
+    }
 }

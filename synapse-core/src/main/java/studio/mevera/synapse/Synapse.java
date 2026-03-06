@@ -3,6 +3,7 @@ package studio.mevera.synapse;
 import org.jetbrains.annotations.NotNull;
 import studio.mevera.synapse.log.SynapseLogger;
 import studio.mevera.synapse.platform.Neuron;
+import studio.mevera.synapse.platform.Platform;
 import studio.mevera.synapse.platform.User;
 
 import java.nio.file.Path;
@@ -17,6 +18,13 @@ import java.util.concurrent.Executor;
  * @param <N> The type of neuron (e.g., BukkitNeuron).
  */
 public interface Synapse<O, U extends User, N extends Neuron<U>> {
+
+    /**
+     * Gets the platform information associated with this Synapse instance.
+     *
+     * @return The platform information instance.
+     */
+    Platform platform();
 
     /**
      * Translates the given text using the provided user context.

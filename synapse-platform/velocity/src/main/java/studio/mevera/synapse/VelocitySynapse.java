@@ -4,6 +4,7 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.proxy.Player;
 import org.jetbrains.annotations.ApiStatus;
+import studio.mevera.synapse.platform.Platform;
 import studio.mevera.synapse.platform.VelocityNeuron;
 import studio.mevera.synapse.platform.VelocityUser;
 
@@ -23,6 +24,11 @@ public final class VelocitySynapse extends AdventureSynapseBase<CommandSource, V
     private VelocitySynapse() {
         // register default dependencies
         this.dependencyRegistry.register(VelocitySynapse.class, this);
+    }
+
+    @Override
+    public Platform platform() {
+        return VelocityPlugin.getInstance().getPlatform();
     }
 
     @Override

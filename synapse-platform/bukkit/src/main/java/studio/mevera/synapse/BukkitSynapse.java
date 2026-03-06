@@ -6,6 +6,8 @@ import studio.mevera.synapse.platform.BukkitUser;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerQuitEvent;
+import studio.mevera.synapse.platform.Platform;
+import studio.mevera.synapse.platform.PlatformInfo;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class BukkitSynapse extends AdventureSynapseBase<CommandSender, BukkitUser, BukkitNeuron> {
 
     private static final BukkitSynapse INSTANCE = new BukkitSynapse();
+    private static final Platform platform = new PlatformInfo("bukkit", org.bukkit.Bukkit.getVersion());
 
     public static BukkitSynapse get() {
         return INSTANCE;
@@ -23,6 +26,11 @@ public final class BukkitSynapse extends AdventureSynapseBase<CommandSender, Buk
     private BukkitSynapse() {
         // register default dependencies
         this.dependencyRegistry.register(BukkitSynapse.class, this);
+    }
+
+    @Override
+    public Platform platform() {
+        return platform;
     }
 
     @Override
