@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class HytaleSynapse extends SynapseBase<CommandSender, HytaleUser, HytaleNeuron> {
 
     private static final HytaleSynapse INSTANCE = new HytaleSynapse();
-    private static final Platform platform = new PlatformInfo("hytale", Universe.MANIFEST.getServerVersion());
+    private static final Platform platform = new PlatformInfo("hytale", Universe.MANIFEST.getVersion().toString());
 
     public static HytaleSynapse get() {
         return INSTANCE;

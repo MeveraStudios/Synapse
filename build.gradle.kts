@@ -5,9 +5,9 @@ plugins {
 
 allprojects {
     group = "studio.mevera"
-    version = "1.4.3"
+    version = "1.4.4"
 
-    val targetJavaVersion = 21
+    val targetJavaVersion = if (name.contains("hytale")) 25 else 21
     tasks.withType<JavaCompile>().configureEach {
         options.encoding = "UTF-8"
         options.release.set(targetJavaVersion)
@@ -18,7 +18,7 @@ allprojects {
     }
 }
 
-extra["imperatVersion"] = "2.4.2"
+extra["imperatVersion"] = "4.0.0-SNAPSHOT"
 
 subprojects {
     apply(plugin = "java")

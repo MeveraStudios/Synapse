@@ -4,6 +4,13 @@ plugins {
 
 repositories {
     mavenCentral()
+    maven {
+        name = "central-snapshots-repo"
+        url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+        content {
+            includeGroup("studio.mevera")
+        }
+    }
 }
 
 dependencies {

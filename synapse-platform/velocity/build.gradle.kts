@@ -6,6 +6,13 @@ plugins {
 repositories {
     mavenCentral()
     maven {
+        name = "central-snapshots-repo"
+        url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+        content {
+            includeGroup("studio.mevera")
+        }
+    }
+    maven {
         name = "papermc"
         url = uri("https://repo.papermc.io/repository/maven-public/")
     }

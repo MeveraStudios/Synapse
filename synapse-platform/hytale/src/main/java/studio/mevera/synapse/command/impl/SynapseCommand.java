@@ -5,27 +5,27 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
-import studio.mevera.imperat.HytaleSource;
-import studio.mevera.imperat.annotations.*;
+import studio.mevera.imperat.HytaleCommandSource;
+import studio.mevera.imperat.annotations.types.*;
 import studio.mevera.synapse.HytaleSynapse;
 
 import java.util.UUID;
 
-@Command("synapse")
+@RootCommand("synapse")
 @Permission("synapse.admin")
 public class SynapseCommand {
 
     private final Message helpMessage = this.getHelpMessage();
 
-    @Usage
+    @Execute
     @SubCommand("help")
-    public void sendHelp(HytaleSource sender) {
+    public void sendHelp(HytaleCommandSource sender) {
         sender.reply(this.helpMessage);
     }
 
     @SubCommand("selfparse")
     @Permission("synapse.admin.selfparse")
-    public void selfParse(HytaleSource sender, @Named("message") @Greedy String text) {
+    public void selfParse(HytaleCommandSource sender, @Named("message") @Greedy String text) {
         HytaleSynapse synapse = HytaleSynapse.get();
         String parsed = synapse.translate(text, sender.origin());
         sender.reply(parsed);
@@ -33,7 +33,7 @@ public class SynapseCommand {
 
     @SubCommand("parse")
     @Permission("synapse.admin.parseother")
-    public void parse(HytaleSource sender, @Named("target") PlayerRef target, @Named("message") @Greedy String text) {
+    public void parse(HytaleCommandSource sender, @Named("target") PlayerRef target, @Named("message") @Greedy String text) {
         HytaleSynapse synapse = HytaleSynapse.get();
         UUID worldID = target.getWorldUuid();
         if (worldID == null) {
@@ -50,11 +50,8 @@ public class SynapseCommand {
             sender.reply("Could not find the target player.");
             return;
         }
-        world.execute(() -> {
-            Player player = target.getReference().getStore().getComponent(refrence, Player.getComponentType());
-            String parsed = synapse.translate(text, player);
-            sender.reply(parsed);
-        });
+        final String parsed = synapse.translate(text, target);
+        sender.reply(parsed);
     }
 
     private Message getHelpMessage() {

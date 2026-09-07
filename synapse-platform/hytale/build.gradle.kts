@@ -5,10 +5,17 @@ plugins {
 
 repositories {
     mavenCentral()
+    maven {
+        name = "central-snapshots-repo"
+        url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+        content {
+            includeGroup("studio.mevera")
+        }
+    }
     maven(url = "https://maven.hytale.com/release/")
 }
 
-val hytaleVersion = "2026.02.19-1a311a592"
+val hytaleVersion = "0.6.3"
 val imperatVersion: String by rootProject.extra
 dependencies {
     api(project(":synapse-core"))
