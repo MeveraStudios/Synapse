@@ -1,12 +1,13 @@
 package studio.mevera.synapse.command;
 
+import studio.mevera.imperat.VelocityCommandSource;
 import studio.mevera.imperat.VelocityImperat;
 import studio.mevera.synapse.VelocityPlugin;
 import studio.mevera.synapse.command.impl.SynapseCommand;
 
 public class CommandManager {
 
-    private final VelocityImperat<VelocityPlugin> imperat;
+    private final VelocityImperat<VelocityPlugin, VelocityCommandSource> imperat;
 
     public CommandManager(final VelocityPlugin plugin) {
         this.imperat = VelocityImperat
